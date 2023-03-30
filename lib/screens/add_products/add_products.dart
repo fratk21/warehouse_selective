@@ -19,14 +19,13 @@ class add_product extends StatefulWidget {
 }
 
 class _add_productState extends State<add_product> {
-  // ignore: non_constant_identifier_names
-  TextEditingController product_name = TextEditingController();
-  // ignore: non_constant_identifier_names
-  TextEditingController prescriptions_name = TextEditingController();
-  // ignore: non_constant_identifier_names
-  TextEditingController material_name = TextEditingController();
-  // ignore: non_constant_identifier_names
-  TextEditingController prescription_des = TextEditingController();
+  TextEditingController productname = TextEditingController();
+
+  TextEditingController prescriptionsname = TextEditingController();
+
+  TextEditingController materialname = TextEditingController();
+
+  TextEditingController prescriptiondes = TextEditingController();
   TextEditingController waste = TextEditingController();
   TextEditingController price = TextEditingController();
 
@@ -85,7 +84,7 @@ class _add_productState extends State<add_product> {
                         padding: EdgeInsets.only(left: 20.0, right: 20),
                         child: inputtext(
                           context: context,
-                          control: material_name,
+                          control: materialname,
                           height: 50,
                           width: width(context),
                           maxline: 1,
@@ -211,11 +210,11 @@ class _add_productState extends State<add_product> {
                         padding: EdgeInsets.only(left: 20.0, right: 20),
                         child: inputtext(
                           context: context,
-                          control: prescriptions_name,
+                          control: prescriptionsname,
                           height: 50,
                           width: width(context),
                           maxline: 1,
-                          maxLengh: 60,
+                          maxLengh: 40,
                           hinttext: "Reçete Adı",
                           icons: Icons.document_scanner_sharp,
                           texttip: TextInputType.name,
@@ -229,7 +228,7 @@ class _add_productState extends State<add_product> {
                         padding: EdgeInsets.only(left: 20.0, right: 20),
                         child: inputtext(
                           context: context,
-                          control: prescription_des,
+                          control: prescriptiondes,
                           height: 100,
                           width: width(context),
                           maxline: 5,
@@ -264,9 +263,9 @@ class _add_productState extends State<add_product> {
                                     .prescriptions(
                                         prescriptionsid: "1",
                                         prescriptionsname:
-                                            prescriptions_name.text,
+                                            prescriptionsname.text,
                                         productid: "1",
-                                        prescriptionsdes: prescription_des.text,
+                                        prescriptionsdes: prescriptiondes.text,
                                         material: []);
                                 prescrip.add(_prescripton);
                                 Navigator.pop(context);
@@ -287,33 +286,47 @@ class _add_productState extends State<add_product> {
     return Padding(
       padding: EdgeInsets.all(8),
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
         elevation: 10,
         child: Column(
           children: [
-            Row(
+            Stack(
               children: [
-                Container(
-                  child: const Icon(Icons.document_scanner_sharp,
-                      size: 24, color: orange),
-                  padding: const EdgeInsets.all(12),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    child: const Icon(Icons.document_scanner_sharp,
+                        size: 24, color: orange),
+                    padding: const EdgeInsets.all(12),
+                  ),
                 ),
-                Container(
-                  child: Text(
-                    "2100",
-                    style: TextStyle(
-                      color: Colors.blueAccent,
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      child: Text(
+                        Name,
+                        style: TextStyle(
+                          color: black,
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(12),
                     ),
                   ),
-                  padding: const EdgeInsets.all(12),
                 ),
-                Container(
-                  child: Text(
-                    "2100",
-                    style: TextStyle(
-                      color: Colors.blueAccent,
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    child: Text(
+                      "2100",
+                      style: TextStyle(
+                        color: black,
+                      ),
                     ),
+                    padding: const EdgeInsets.all(12),
                   ),
-                  padding: const EdgeInsets.all(12),
                 ),
               ],
             ),
@@ -323,16 +336,40 @@ class _add_productState extends State<add_product> {
                   child: const Icon(Icons.description, size: 24, color: orange),
                   padding: const EdgeInsets.all(12),
                 ),
-                Container(
-                  child: Text(
-                    "2100",
-                    style: TextStyle(
-                      color: Colors.blueAccent,
+                Expanded(
+                  child: Container(
+                    child: Text(
+                      Description,
+                      style: TextStyle(
+                        color: black,
+                      ),
                     ),
+                    padding: const EdgeInsets.all(12),
                   ),
-                  padding: const EdgeInsets.all(12),
                 ),
               ],
+            ),
+            Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                width: width(context),
+                height: 40,
+                child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      elevation: 10,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(20.0),
+                      ),
+                      backgroundColor: orange,
+                    ),
+                    child: Text("data")),
+              ),
             )
           ],
         ),
@@ -393,7 +430,7 @@ class _add_productState extends State<add_product> {
                 ),
                 inputtext(
                   context: context,
-                  control: product_name,
+                  control: productname,
                   height: 50,
                   width: width(context),
                   maxline: 1,

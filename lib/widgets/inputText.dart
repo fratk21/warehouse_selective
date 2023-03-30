@@ -66,6 +66,7 @@ class _inputtextState extends State<inputtext> {
                 child: TextField(
               keyboardType: widget.texttip,
               obscureText: widget.gizli,
+              maxLines: widget.maxline,
               controller: widget.control,
               cursorColor: orange,
               decoration: InputDecoration(
