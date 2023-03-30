@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class material {
   final String materialid;
+  final String productid;
+  final String prescriptionsid;
+
   final String materialname;
   final String west;
   final String unit;
@@ -10,6 +13,8 @@ class material {
 
   const material({
     required this.materialid,
+    required this.productid,
+    required this.prescriptionsid,
     required this.materialname,
     required this.west,
     required this.unit,
@@ -27,6 +32,8 @@ class material {
       unit: snapshot["unit"],
       price: snapshot["price"],
       priceType: snapshot["priceType"],
+      productid: snapshot["productid"],
+      prescriptionsid: snapshot["prescriptionsid"],
     );
   }
 
@@ -36,6 +43,8 @@ class material {
         "west": west,
         "unit": unit,
         "price": price,
-        "priceType": priceType
+        "priceType": priceType,
+        "prescriptionsid": prescriptionsid,
+        "productid": productid,
       };
 }

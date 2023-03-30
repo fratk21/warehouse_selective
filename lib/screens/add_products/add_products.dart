@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:warehouse_selective/constants/constants.dart';
 import 'package:warehouse_selective/models/prescriptions.dart' as model;
+import 'package:warehouse_selective/models/material.dart' as modelmaterial;
 import 'package:warehouse_selective/widgets/appbar.dart';
 import 'package:warehouse_selective/widgets/combo.dart';
 import 'package:warehouse_selective/widgets/inputText.dart';
@@ -45,7 +46,7 @@ class _add_productState extends State<add_product> {
     });
   }
 
-  Future malzemePopup() {
+  Future malzemePopup(String prescriptionsid, String productid) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -129,23 +130,38 @@ class _add_productState extends State<add_product> {
                               textsize: 15),
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20.0, right: 20),
-                        child: inputtext(
-                          context: context,
-                          control: price,
-                          height: 50,
-                          width: width(context),
-                          maxline: 1,
-                          maxLengh: 60,
-                          hinttext: "Birim Fiyatı",
-                          icons: Icons.copyright_rounded,
-                          texttip: TextInputType.number,
-                          gizli: false,
-                          color: white,
-                          color2: orange,
-                          elevation: 10,
-                        ),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: 20.0,
+                            ),
+                            child: inputtext(
+                              context: context,
+                              control: price,
+                              height: 50,
+                              width: width(context) / 3,
+                              maxline: 1,
+                              maxLengh: 60,
+                              hinttext: "Birim Fiyatı",
+                              icons: Icons.copyright_rounded,
+                              texttip: TextInputType.number,
+                              gizli: false,
+                              color: white,
+                              color2: orange,
+                              elevation: 10,
+                            ),
+                          ),
+                          customCombo(
+                              bosluk: 10,
+                              color: white,
+                              iconsize: 20,
+                              items: dropdownItems,
+                              selectedValue: selectedValue,
+                              radius: 20,
+                              text: "Birim",
+                              textsize: 15),
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.all(20.0),
@@ -158,7 +174,20 @@ class _add_productState extends State<add_product> {
                                       MaterialStateProperty.all(orange),
                                   textStyle: MaterialStateProperty.all(
                                       TextStyle(fontSize: 20))),
-                              onPressed: () {},
+                              onPressed: () {
+                                modelmaterial.material materialmodel =
+                                    modelmaterial.material(
+                                        materialid: "1",
+                                        prescriptionsid: prescriptionsid,
+                                        productid: productid,
+                                        materialname: materialname.text,
+                                        west: waste.text,
+                                        unit: selectedValue.toString(),
+                                        price: price.text,
+                                        priceType: "tl");
+                                print(prescriptionsid);
+                                print(productid);
+                              },
                               child: Text("Ekle")),
                         ),
                       )
@@ -259,7 +288,7 @@ class _add_productState extends State<add_product> {
                                   textStyle:
                                       TextStyle(fontWeight: FontWeight.bold)),
                               onPressed: () {
-                                model.prescriptions _prescripton = model
+                                model.prescriptions prescripton = model
                                     .prescriptions(
                                         prescriptionsid: "1",
                                         prescriptionsname:
@@ -267,7 +296,12 @@ class _add_productState extends State<add_product> {
                                         productid: "1",
                                         prescriptionsdes: prescriptiondes.text,
                                         material: []);
-                                prescrip.add(_prescripton);
+                                prescrip.add(prescripton);
+                                prescriptiondes.clear();
+                                prescriptionsname.clear();
+                                setState(() {
+                                  prescrip;
+                                });
                                 Navigator.pop(context);
                               },
                               child: Text("Ekle")),
@@ -282,32 +316,50 @@ class _add_productState extends State<add_product> {
         });
   }
 
-  Widget getCardItem(String Name, String Description) {
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        elevation: 10,
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: const Icon(Icons.document_scanner_sharp,
-                        size: 24, color: orange),
-                    padding: const EdgeInsets.all(12),
+  Widget getCardItem(String Name, String Description, String prescriptionsid,
+      String productid) {
+    return InkWell(
+      onTap: () {
+        print("tıklandı");
+      },
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          elevation: 10,
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      child: const Icon(Icons.document_scanner_sharp,
+                          size: 24, color: orange),
+                      padding: const EdgeInsets.all(12),
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.center,
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        child: Text(
+                          Name,
+                          style: TextStyle(
+                            color: black,
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(12),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
                     child: Container(
                       child: Text(
-                        Name,
+                        "2100",
                         style: TextStyle(
                           color: black,
                         ),
@@ -315,63 +367,54 @@ class _add_productState extends State<add_product> {
                       padding: const EdgeInsets.all(12),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    child: Text(
-                      "2100",
-                      style: TextStyle(
-                        color: black,
-                      ),
-                    ),
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    child:
+                        const Icon(Icons.description, size: 24, color: orange),
                     padding: const EdgeInsets.all(12),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                  child: const Icon(Icons.description, size: 24, color: orange),
-                  padding: const EdgeInsets.all(12),
-                ),
-                Expanded(
-                  child: Container(
-                    child: Text(
-                      Description,
-                      style: TextStyle(
-                        color: black,
+                  Expanded(
+                    child: Container(
+                      child: Text(
+                        Description,
+                        style: TextStyle(
+                          color: black,
+                        ),
                       ),
+                      padding: const EdgeInsets.all(12),
                     ),
-                    padding: const EdgeInsets.all(12),
                   ),
+                ],
+              ),
+              Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
-              ],
-            ),
-            Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                width: width(context),
-                height: 40,
-                child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      elevation: 10,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(20.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  width: width(context),
+                  height: 40,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        malzemePopup(prescriptionsid, productid);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(20.0),
+                        ),
+                        backgroundColor: grey_yellow,
                       ),
-                      backgroundColor: orange,
-                    ),
-                    child: Text("data")),
-              ),
-            )
-          ],
+                      child: Text("Malzeme Ekle")),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -462,16 +505,23 @@ class _add_productState extends State<add_product> {
                   ],
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height,
+                  height: prescrip.isEmpty
+                      ? MediaQuery.of(context).size.height
+                      : (MediaQuery.of(context).size.height / 4) *
+                          prescrip.length,
                   child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: prescrip.isEmpty ? save.length : prescrip.length,
                     itemBuilder: (context, index) {
                       return prescrip.isEmpty
                           ? Container()
                           : Container(
                               child: getCardItem(
-                                  prescrip[index].prescriptionsname,
-                                  prescrip[index].prescriptionsdes),
+                                prescrip[index].prescriptionsname,
+                                prescrip[index].prescriptionsdes,
+                                prescrip[index].prescriptionsid,
+                                prescrip[index].productid,
+                              ),
                             );
                     },
                   ),

@@ -104,52 +104,22 @@ class OnboardingScreenThree extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: appPadding * 2),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginScreen()));
-                      },
-                      child: Text(
-                        'Skip',
-                        style: TextStyle(
-                          color: black,
-                          fontSize: 20.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: appPadding),
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
-                            ));
-                      },
-                      backgroundColor: white,
-                      child: Icon(
-                        Icons.done_rounded,
-                        color: black,
-                        size: 30,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
           ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LoginScreen(),
+              ));
+        },
+        backgroundColor: white,
+        child: Icon(
+          Icons.done_rounded,
+          color: black,
+          size: 30,
         ),
       ),
     );
