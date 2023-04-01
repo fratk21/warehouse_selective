@@ -35,6 +35,9 @@ class auth_services {
           "username": username,
           "email": email,
         });
+        await _firestore.collection("products").doc(cred.user!.uid).set({
+          "uid": cred.user!.uid,
+        });
 
         _res = "Success";
       } else {}

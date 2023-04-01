@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:warehouse_selective/screens/onboarding/screen_three.dart';
 import 'package:warehouse_selective/screens/onboarding/screen_two.dart';
@@ -38,4 +39,14 @@ pickImage(ImageSource source) async {
   } catch (e) {
     print(e);
   }
+}
+
+Future<void> showsnackbar(
+    BuildContext context, String text, AnimatedSnackBarType type) {
+  return AnimatedSnackBar.material(
+    text,
+    type: type,
+    mobileSnackBarPosition: MobileSnackBarPosition.bottom,
+    snackBarStrategy: RemoveSnackBarStrategy(),
+  ).show(context);
 }

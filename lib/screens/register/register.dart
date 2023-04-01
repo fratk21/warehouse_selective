@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:warehouse_selective/navigator.dart';
 import 'package:warehouse_selective/services/auth_service.dart';
 
 import '../../components/background.dart';
@@ -84,24 +85,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     )),
               ),
             ),
-          //  SizedBox(height: size.height * 0.03),
-           // Container(
-           //   alignment: Alignment.center,
-           //   margin: EdgeInsets.symmetric(horizontal: 40),
-           //   color: Colors.transparent,
-           //   child: Form(
-           //     child: IntlPhoneField(
-           //       autofocus: true,
-           //       invalidNumberMessage: 'Invalid Phone Number!',
-           //       textAlignVertical: TextAlignVertical.center,
-           //       onChanged: (phone) => phoneNumber = phone.completeNumber,
-           //       initialCountryCode: 'TR',
-           //       flagsButtonPadding: const EdgeInsets.only(right: 10),
-           //       showDropdownIcon: false,
-           //       keyboardType: TextInputType.phone,
-           //     ),
-           //   ),
-           // ),
+            //  SizedBox(height: size.height * 0.03),
+            // Container(
+            //   alignment: Alignment.center,
+            //   margin: EdgeInsets.symmetric(horizontal: 40),
+            //   color: Colors.transparent,
+            //   child: Form(
+            //     child: IntlPhoneField(
+            //       autofocus: true,
+            //       invalidNumberMessage: 'Invalid Phone Number!',
+            //       textAlignVertical: TextAlignVertical.center,
+            //       onChanged: (phone) => phoneNumber = phone.completeNumber,
+            //       initialCountryCode: 'TR',
+            //       flagsButtonPadding: const EdgeInsets.only(right: 10),
+            //       showDropdownIcon: false,
+            //       keyboardType: TextInputType.phone,
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: size.height * 0.03),
             Container(
               alignment: Alignment.center,
@@ -132,6 +133,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () async {
                   String? res = await _servis.register(
                       username.text, email.text, password.text, phone.text);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => navigator_screen(),
+                      ));
                 },
                 style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsets>(

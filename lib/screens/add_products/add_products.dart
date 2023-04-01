@@ -1,10 +1,14 @@
 import 'dart:typed_data';
 
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rounded_expansion_tile/rounded_expansion_tile.dart';
+import 'package:uuid/uuid.dart';
 import 'package:warehouse_selective/constants/constants.dart';
 import 'package:warehouse_selective/models/prescriptions.dart' as model;
 import 'package:warehouse_selective/models/material.dart' as modelmaterial;
+import 'package:warehouse_selective/services/firestoreMethods.dart';
 import 'package:warehouse_selective/widgets/appbar.dart';
 import 'package:warehouse_selective/widgets/combo.dart';
 import 'package:warehouse_selective/widgets/inputText.dart';
@@ -29,10 +33,14 @@ class _add_productState extends State<add_product> {
   TextEditingController prescriptiondes = TextEditingController();
   TextEditingController waste = TextEditingController();
   TextEditingController price = TextEditingController();
+  bool visibilty = false;
 
   Uint8List? _image;
   String selectedValue = "0";
   List<model.prescriptions> prescrip = [];
+  List<modelmaterial.material> materials = [];
+  String productuid = const Uuid().v1();
+
   List save = ["1"];
   selectImage() async {
     Uint8List? im;
@@ -46,7 +54,7 @@ class _add_productState extends State<add_product> {
     });
   }
 
-  Future malzemePopup(String prescriptionsid, String productid) {
+  Future malzemePopup(int index, String prescriptionsid, String productid) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -175,18 +183,32 @@ class _add_productState extends State<add_product> {
                                   textStyle: MaterialStateProperty.all(
                                       TextStyle(fontSize: 20))),
                               onPressed: () {
+                                String materialid = const Uuid().v1();
+
                                 modelmaterial.material materialmodel =
                                     modelmaterial.material(
-                                        materialid: "1",
+                                        materialid: materialid,
                                         prescriptionsid: prescriptionsid,
-                                        productid: productid,
+                                        productid: productuid,
                                         materialname: materialname.text,
                                         west: waste.text,
                                         unit: selectedValue.toString(),
                                         price: price.text,
                                         priceType: "tl");
-                                print(prescriptionsid);
-                                print(productid);
+                                print("reçete id $prescriptionsid");
+                                for (var i = 0; i < prescrip.length; i++) {
+                                  if (prescrip[i].prescriptionsid.toString() ==
+                                      prescriptionsid) {
+                                    prescrip[i].material!.add(materialmodel);
+                                  } else {
+                                    print("reçete farklı");
+                                  }
+                                }
+
+                                setState(() {
+                                  prescrip[index].material!;
+                                });
+                                Navigator.pop(context);
                               },
                               child: Text("Ekle")),
                         ),
@@ -287,22 +309,25 @@ class _add_productState extends State<add_product> {
                                   backgroundColor: orange,
                                   textStyle:
                                       TextStyle(fontWeight: FontWeight.bold)),
-                              onPressed: () {
-                                model.prescriptions prescripton = model
-                                    .prescriptions(
-                                        prescriptionsid: "1",
-                                        prescriptionsname:
-                                            prescriptionsname.text,
-                                        productid: "1",
-                                        prescriptionsdes: prescriptiondes.text,
-                                        material: []);
-                                prescrip.add(prescripton);
-                                prescriptiondes.clear();
-                                prescriptionsname.clear();
-                                setState(() {
-                                  prescrip;
-                                });
-                                Navigator.pop(context);
+                              onPressed: () async {
+                                if (prescriptionsname.text.isEmpty) {
+                                  showsnackbar(
+                                      context,
+                                      "Lütfen Reçete Adını Yazınız",
+                                      AnimatedSnackBarType.error);
+                                } else {
+                                  String prescriptionsid = const Uuid().v1();
+                                  await firestoreservices()
+                                      .productAdd_prescriptions(
+                                          prescriptionsid,
+                                          prescriptionsname.text,
+                                          productuid,
+                                          [],
+                                          prescriptiondes.text);
+
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.pop(context);
+                                }
                               },
                               child: Text("Ekle")),
                         ),
@@ -316,20 +341,17 @@ class _add_productState extends State<add_product> {
         });
   }
 
-  Widget getCardItem(String Name, String Description, String prescriptionsid,
-      String productid) {
-    return InkWell(
-      onTap: () {
-        print("tıklandı");
-      },
-      child: Padding(
-        padding: EdgeInsets.all(8),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          elevation: 10,
-          child: Column(
+  Widget getCardItem(int indexs, String Name, String Description,
+      String prescriptionsid, String productid) {
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        elevation: 10,
+        child: RoundedExpansionTile(
+          title: Column(
             children: [
               Stack(
                 children: [
@@ -401,7 +423,8 @@ class _add_productState extends State<add_product> {
                   height: 40,
                   child: ElevatedButton(
                       onPressed: () {
-                        malzemePopup(prescriptionsid, productid);
+                        print(indexs);
+                        malzemePopup(indexs, prescriptionsid, productid);
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 10,
@@ -415,9 +438,49 @@ class _add_productState extends State<add_product> {
               )
             ],
           ),
+          children: [
+            Container(
+              height: prescrip[indexs].material!.isEmpty
+                  ? MediaQuery.of(context).size.height / 25
+                  : (MediaQuery.of(context).size.height / 25) *
+                      prescrip[indexs].material!.length,
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: prescrip[indexs].material!.isEmpty
+                    ? save.length
+                    : prescrip[indexs].material!.length,
+                itemBuilder: (context, index) {
+                  return prescrip[index].material!.isEmpty
+                      ? Container()
+                      : Container(
+                          child: getCardDetails(prescrip[index].material![index]
+                              as modelmaterial.material),
+                        );
+                },
+              ),
+            )
+          ],
         ),
       ),
     );
+  }
+
+  Widget getCardDetails(modelmaterial.material material) {
+    return Container(
+        child: Column(
+      children: [
+        Row(
+          children: [
+            Text(material.materialname),
+            SizedBox(
+              width: 2,
+            ),
+            Text(material.materialid),
+          ],
+        ),
+        Divider(),
+      ],
+    ));
   }
 
   @override
@@ -471,61 +534,106 @@ class _add_productState extends State<add_product> {
                 SizedBox(
                   height: 10,
                 ),
-                inputtext(
-                  context: context,
-                  control: productname,
-                  height: 50,
-                  width: width(context),
-                  maxline: 1,
-                  maxLengh: 60,
-                  hinttext: "Ürün Adı",
-                  icons: Icons.chair,
-                  texttip: TextInputType.name,
-                  gizli: false,
-                  color: white,
-                  color2: orange,
-                  elevation: 10,
+                inputtex(
+                  context,
+                  productname,
+                  50,
+                  width(context),
+                  1,
+                  60,
+                  "Ürün Adı",
+                  Icons.chair,
+                  TextInputType.name,
+                  false,
+                  white,
+                  orange,
+                  10,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Reçete Oluştur"),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                          onPressed: RecetePopup, icon: Icon(Icons.add)),
-                    )
-                  ],
-                ),
                 Container(
-                  height: prescrip.isEmpty
-                      ? MediaQuery.of(context).size.height
-                      : (MediaQuery.of(context).size.height / 4) *
-                          prescrip.length,
-                  child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: prescrip.isEmpty ? save.length : prescrip.length,
-                    itemBuilder: (context, index) {
-                      return prescrip.isEmpty
-                          ? Container()
-                          : Container(
-                              child: getCardItem(
-                                prescrip[index].prescriptionsname,
-                                prescrip[index].prescriptionsdes,
-                                prescrip[index].prescriptionsid,
-                                prescrip[index].productid,
-                              ),
-                            );
-                    },
-                  ),
-                )
+                  width: width(context),
+                  child: ElevatedButton(
+
+                      // ignore: prefer_const_constructors
+                      style: ElevatedButton.styleFrom(
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(20.0),
+                          ),
+                          backgroundColor: orange,
+                          textStyle: TextStyle(fontWeight: FontWeight.bold)),
+                      onPressed: () async {
+                        if (productname.text.isEmpty) {
+                          showsnackbar(context, "Lütfen ürün adını yazınız",
+                              AnimatedSnackBarType.error);
+                          // print(productname.text);
+                        } else {
+                          if (visibilty) {
+                            await firestoreservices().productupdate(
+                                productuid, _image, productname.text);
+                          } else {
+                            await firestoreservices().productCreate(
+                                productuid, _image, productname.text);
+                          }
+
+                          setState(() {
+                            visibilty = true;
+                          });
+                        }
+                      },
+                      child: visibilty
+                          ? Text("Ürünü Güncelle")
+                          : Text("Ürün oluştur")),
+                ),
+                visibilty ? Divider() : Container(),
+                visibilty
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text("Reçete Oluştur"),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: IconButton(
+                                onPressed: RecetePopup, icon: Icon(Icons.add)),
+                          )
+                        ],
+                      )
+                    : Container(),
+                visibilty
+                    ? Container(
+                        height: prescrip.isEmpty
+                            ? MediaQuery.of(context).size.height
+                            : (MediaQuery.of(context).size.height / 2) *
+                                prescrip.length,
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              prescrip.isEmpty ? save.length : prescrip.length,
+                          itemBuilder: (context, index) {
+                            print("card görüntüleme index $index");
+                            print(prescrip.isEmpty
+                                ? 1
+                                : prescrip[index].prescriptionsid);
+                            return prescrip.isEmpty
+                                ? Container()
+                                : Container(
+                                    child: getCardItem(
+                                      index,
+                                      prescrip[index].prescriptionsname,
+                                      prescrip[index].prescriptionsdes,
+                                      prescrip[index].prescriptionsid,
+                                      prescrip[index].productid,
+                                    ),
+                                  );
+                          },
+                        ),
+                      )
+                    : Container()
               ],
             ),
           ),
