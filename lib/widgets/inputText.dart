@@ -39,7 +39,7 @@ class _inputtextState extends State<inputtext> {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30.0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: widget.elevation,
       child: Container(
@@ -47,7 +47,7 @@ class _inputtextState extends State<inputtext> {
         width: widget.width,
         decoration: BoxDecoration(
           color: widget.color,
-          borderRadius: BorderRadius.all(Radius.circular(30)),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -70,7 +70,7 @@ class _inputtextState extends State<inputtext> {
               controller: widget.control,
               cursorColor: orange,
               decoration: InputDecoration(
-                hintText: widget.hinttext,
+                labelText: widget.hinttext,
                 border: InputBorder.none,
               ),
             )),
@@ -98,7 +98,7 @@ Widget inputtex(
 ) {
   return Card(
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(30.0),
+      borderRadius: BorderRadius.circular(18.0),
     ),
     elevation: elevation,
     child: Container(
@@ -106,7 +106,7 @@ Widget inputtex(
       width: width,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.all(Radius.circular(30)),
+        borderRadius: BorderRadius.all(Radius.circular(18)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -129,7 +129,8 @@ Widget inputtex(
             controller: control,
             cursorColor: orange,
             decoration: InputDecoration(
-              hintText: hinttext,
+              labelText: hinttext,
+              labelStyle: TextStyle(color: Colors.black),
               border: InputBorder.none,
             ),
           )),

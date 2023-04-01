@@ -1,9 +1,10 @@
 // ignore: camel_case_types
-import 'dart:io';
+
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:warehouse_selective/models/material.dart' as materialModel;
 import 'package:warehouse_selective/models/prescriptions.dart'
     as prescriptionsModel;
 import 'package:warehouse_selective/services/storage_methods.dart';
@@ -133,6 +134,16 @@ class firestoreservices {
     String priceType,
   ) async {
     try {} catch (e) {
+      materialModel.material material = materialModel.material(
+          materialid: materialid,
+          productid: productid,
+          prescriptionsid: prescriptionsid,
+          materialname: materialname,
+          west: west,
+          unit: unit,
+          price: price,
+          priceType: priceType);
+
       print(e);
     }
   }

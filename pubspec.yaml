@@ -49,6 +49,8 @@ dependencies:
   rounded_expansion_tile: ^0.0.13
   uuid: ^3.0.7
   animated_snack_bar: ^0.3.0
+  #settings_ui: ^2.0.2
+
 
   
   

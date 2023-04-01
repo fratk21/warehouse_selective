@@ -38,7 +38,9 @@ class _add_productState extends State<add_product> {
   bool visibilty = false;
 
   Uint8List? _image;
-  String selectedValue = "0";
+  String selectedValue = "Kg";
+  String selectedValueprice = "TL";
+
   List<model.prescriptions> prescrip = [];
   List<modelmaterial.material> materials = [];
   String productuid = const Uuid().v1();
@@ -166,8 +168,8 @@ class _add_productState extends State<add_product> {
                               bosluk: 10,
                               color: white,
                               iconsize: 20,
-                              items: dropdownItems,
-                              selectedValue: selectedValue,
+                              items: dropdownpricetype,
+                              selectedValue: selectedValueprice,
                               radius: 20,
                               text: "Birim",
                               textsize: 15),
@@ -187,7 +189,6 @@ class _add_productState extends State<add_product> {
                               onPressed: () {
                                 String materialid = const Uuid().v1();
 
-                          
                                 Navigator.pop(context);
                               },
                               child: Text("Ekle")),
@@ -543,6 +544,21 @@ class _add_productState extends State<add_product> {
                   orange,
                   10,
                 ),
+                inputtex(
+                  context,
+                  productname,
+                  50,
+                  width(context),
+                  1,
+                  60,
+                  "Ürün modül Sayısı",
+                  Icons.chair,
+                  TextInputType.number,
+                  false,
+                  white,
+                  orange,
+                  10,
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -646,27 +662,51 @@ class _add_productState extends State<add_product> {
 List<DropdownMenuItem<String>> get dropdownItems {
   List<DropdownMenuItem<String>> timeitems = [
     const DropdownMenuItem(
-        value: "0",
+        value: "Lt",
         child: Text(
           "Litre",
           style: TextStyle(fontSize: 14),
         )),
     const DropdownMenuItem(
-        value: "1",
+        value: "m2",
         child: Text(
           "m2",
           style: TextStyle(fontSize: 14),
         )),
     const DropdownMenuItem(
-        value: "2",
+        value: "m3",
         child: Text(
           "m3",
           style: TextStyle(fontSize: 14),
         )),
     const DropdownMenuItem(
-        value: "3",
+        value: "Kg",
         child: Text(
           "Kg",
+          style: TextStyle(fontSize: 14),
+        )),
+  ];
+  return timeitems;
+}
+
+List<DropdownMenuItem<String>> get dropdownpricetype {
+  List<DropdownMenuItem<String>> timeitems = [
+    const DropdownMenuItem(
+        value: "TL",
+        child: Text(
+          "TL",
+          style: TextStyle(fontSize: 14),
+        )),
+    const DropdownMenuItem(
+        value: "EURO",
+        child: Text(
+          "EURO",
+          style: TextStyle(fontSize: 14),
+        )),
+    const DropdownMenuItem(
+        value: "DOLAR",
+        child: Text(
+          "DOLAR",
           style: TextStyle(fontSize: 14),
         )),
   ];

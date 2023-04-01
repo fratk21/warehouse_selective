@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:warehouse_selective/constants/constants.dart';
 import 'package:warehouse_selective/screens/add_products/add_products.dart';
+import 'package:warehouse_selective/screens/analysis/analysis_screen.dart';
+import 'package:warehouse_selective/screens/calculator/calculator.dart';
+import 'package:warehouse_selective/screens/products/products.dart';
+import 'package:warehouse_selective/screens/settings/settings.dart';
 
 class navigator_screen extends StatefulWidget {
   const navigator_screen({super.key});
@@ -13,11 +17,39 @@ class navigator_screen extends StatefulWidget {
 
 class _navigator_screenState extends State<navigator_screen> {
   int _bottomNavIndex = 0;
+  late PageController pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
+
+  void dispose() {
+    super.dispose();
+    pageController.dispose();
+  }
+
+  void onPageChanged(int index) {
+    setState(() {
+      _bottomNavIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(), //destination screen
+      body: PageView(
+        padEnds: true,
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        children: [
+          analysis_screen(),
+          products_screen(),
+          calculator_screen(),
+          settings_screen(),
+        ],
+      ), //destination screen
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.view_list,
         backgroundColor: orange,
@@ -63,7 +95,12 @@ class _navigator_screenState extends State<navigator_screen> {
         notchSmoothness: NotchSmoothness.softEdge,
         leftCornerRadius: 32,
         rightCornerRadius: 32,
-        onTap: (index) => setState(() => _bottomNavIndex = index),
+        onTap: (index) {
+          setState(() {
+            _bottomNavIndex = index;
+            pageController.jumpToPage(_bottomNavIndex);
+          });
+        },
         activeColor: orange,
         blurEffect: true,
         splashColor: orange,
