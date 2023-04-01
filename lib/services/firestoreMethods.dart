@@ -109,8 +109,6 @@ class firestoreservices {
               productid: productUid,
               material: material,
               prescriptionsdes: prescriptionsdes);
-      List<prescriptionsModel.prescriptions> prescription = [];
-      prescription.add(prescriptions);
       await _firestore
           .collection("products")
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -120,6 +118,21 @@ class firestoreservices {
         "prescriptions": FieldValue.arrayUnion([prescriptions.toJson()])
       });
     } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String?> prescriptionsAdd_material(
+    String materialid,
+    String productid,
+    String prescriptionsid,
+    String materialname,
+    String west,
+    String unit,
+    String price,
+    String priceType,
+  ) async {
+    try {} catch (e) {
       print(e);
     }
   }

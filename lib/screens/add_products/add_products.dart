@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rounded_expansion_tile/rounded_expansion_tile.dart';
@@ -185,29 +187,7 @@ class _add_productState extends State<add_product> {
                               onPressed: () {
                                 String materialid = const Uuid().v1();
 
-                                modelmaterial.material materialmodel =
-                                    modelmaterial.material(
-                                        materialid: materialid,
-                                        prescriptionsid: prescriptionsid,
-                                        productid: productuid,
-                                        materialname: materialname.text,
-                                        west: waste.text,
-                                        unit: selectedValue.toString(),
-                                        price: price.text,
-                                        priceType: "tl");
-                                print("reçete id $prescriptionsid");
-                                for (var i = 0; i < prescrip.length; i++) {
-                                  if (prescrip[i].prescriptionsid.toString() ==
-                                      prescriptionsid) {
-                                    prescrip[i].material!.add(materialmodel);
-                                  } else {
-                                    print("reçete farklı");
-                                  }
-                                }
-
-                                setState(() {
-                                  prescrip[index].material!;
-                                });
+                          
                                 Navigator.pop(context);
                               },
                               child: Text("Ekle")),
@@ -341,8 +321,10 @@ class _add_productState extends State<add_product> {
         });
   }
 
-  Widget getCardItem(int indexs, String Name, String Description,
-      String prescriptionsid, String productid) {
+  Widget getCardItem(
+    int indexs,
+    snap,
+  ) {
     return Padding(
       padding: EdgeInsets.all(8),
       child: Card(
@@ -368,7 +350,7 @@ class _add_productState extends State<add_product> {
                       alignment: Alignment.center,
                       child: Container(
                         child: Text(
-                          Name,
+                          snap["prescriptions"][indexs]["prescriptionsname"],
                           style: TextStyle(
                             color: black,
                           ),
@@ -401,7 +383,7 @@ class _add_productState extends State<add_product> {
                   Expanded(
                     child: Container(
                       child: Text(
-                        Description,
+                        snap["prescriptions"][indexs]["prescriptionsdes"],
                         style: TextStyle(
                           color: black,
                         ),
@@ -424,7 +406,10 @@ class _add_productState extends State<add_product> {
                   child: ElevatedButton(
                       onPressed: () {
                         print(indexs);
-                        malzemePopup(indexs, prescriptionsid, productid);
+                        malzemePopup(
+                            indexs,
+                            snap["prescriptions"][indexs]["prescriptionsid"],
+                            snap["prescriptions"][indexs]["productid"]);
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 10,
@@ -439,44 +424,53 @@ class _add_productState extends State<add_product> {
             ],
           ),
           children: [
-            Container(
-              height: prescrip[indexs].material!.isEmpty
-                  ? MediaQuery.of(context).size.height / 25
-                  : (MediaQuery.of(context).size.height / 25) *
-                      prescrip[indexs].material!.length,
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: prescrip[indexs].material!.isEmpty
-                    ? save.length
-                    : prescrip[indexs].material!.length,
-                itemBuilder: (context, index) {
-                  return prescrip[index].material!.isEmpty
-                      ? Container()
-                      : Container(
-                          child: getCardDetails(prescrip[index].material![index]
-                              as modelmaterial.material),
-                        );
-                },
-              ),
-            )
+            snap["prescriptions"][indexs]["material"].length == 0
+                ? Container()
+                : Container(
+                    height: MediaQuery.of(context).size.height / 25,
+                    child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('products')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .collection("product")
+                          .where("productid", isEqualTo: productuid)
+                          .snapshots(),
+                      builder: (context,
+                          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                              snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        print(snapshot.data!.docs.length);
+                        return snapshot.data!.docs.isEmpty
+                            ? Container()
+                            : ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: snapshot.data!.docs[0]
+                                    .data()["prescriptions"][indexs]["material"]
+                                    .length,
+                                itemBuilder: (ctx, index) => Container(
+                                    child: getCardDetails(
+                                        index, snapshot.data!.docs[0].data())),
+                              );
+                      },
+                    ),
+                  )
           ],
         ),
       ),
     );
   }
 
-  Widget getCardDetails(modelmaterial.material material) {
+  Widget getCardDetails(int index, snap) {
     return Container(
         child: Column(
       children: [
         Row(
-          children: [
-            Text(material.materialname),
-            SizedBox(
-              width: 2,
-            ),
-            Text(material.materialid),
-          ],
+          children: [Text("data")],
         ),
         Divider(),
       ],
@@ -606,29 +600,35 @@ class _add_productState extends State<add_product> {
                     : Container(),
                 visibilty
                     ? Container(
-                        height: prescrip.isEmpty
-                            ? MediaQuery.of(context).size.height
-                            : (MediaQuery.of(context).size.height / 2) *
-                                prescrip.length,
-                        child: ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount:
-                              prescrip.isEmpty ? save.length : prescrip.length,
-                          itemBuilder: (context, index) {
-                            print("card görüntüleme index $index");
-                            print(prescrip.isEmpty
-                                ? 1
-                                : prescrip[index].prescriptionsid);
-                            return prescrip.isEmpty
+                        height: MediaQuery.of(context).size.height,
+                        child: StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('products')
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .collection("product")
+                              .where("productid", isEqualTo: productuid)
+                              .snapshots(),
+                          builder: (context,
+                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                  snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            print(snapshot.data!.docs.length);
+                            return snapshot.data!.docs.isEmpty
                                 ? Container()
-                                : Container(
-                                    child: getCardItem(
-                                      index,
-                                      prescrip[index].prescriptionsname,
-                                      prescrip[index].prescriptionsdes,
-                                      prescrip[index].prescriptionsid,
-                                      prescrip[index].productid,
-                                    ),
+                                : ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: snapshot.data!.docs[0]
+                                        .data()["prescriptions"]
+                                        .length,
+                                    itemBuilder: (ctx, index) => Container(
+                                        child: getCardItem(index,
+                                            snapshot.data!.docs[0].data())),
                                   );
                           },
                         ),

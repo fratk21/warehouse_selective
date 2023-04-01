@@ -4,7 +4,6 @@ class material {
   final String materialid;
   final String productid;
   final String prescriptionsid;
-
   final String materialname;
   final String west;
   final String unit;
