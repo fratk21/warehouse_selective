@@ -46,9 +46,11 @@ dependencies:
   cloud_firestore: ^4.4.5
   intl_phone_field: ^3.1.0
   image_picker: ^0.8.7+1
-  rounded_expansion_tile: ^0.0.13
   uuid: ^3.0.7
   animated_snack_bar: ^0.3.0
+  expansion_tile_card: ^2.0.0
+  expandable_text: ^2.3.0
+
   #settings_ui: ^2.0.2
 
 
@@ -96,10 +98,10 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Mulish
+    - family: CrimsonText
       fonts:
-        - asset: assets/fonts/Mulish-Light.ttf
-        - asset: assets/fonts/Mulish-SemiBold.ttf
+        - asset: assets/fonts/CrimsonText-Regular.ttf
+       
 
   #   - family: Trajan Pro
   #     fonts:

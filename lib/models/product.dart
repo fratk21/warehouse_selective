@@ -6,13 +6,13 @@ class product {
   final String? productimage;
   final String price;
   final String priceType;
-  final List? prescriptions;
+  final List? modules;
 
   const product({
     required this.productid,
     required this.productname,
     required this.productimage,
-    required this.prescriptions,
+    required this.modules,
     required this.price,
     required this.priceType,
   });
@@ -24,7 +24,7 @@ class product {
         productid: snapshot["productid"],
         productname: snapshot["productname"],
         productimage: snapshot["productimage"],
-        prescriptions: snapshot["prescriptions"],
+        modules: snapshot["modules"],
         price: snapshot["price"],
         priceType: snapshot["priceType"]);
   }
@@ -33,7 +33,7 @@ class product {
         "productid": productid,
         "productname": productname,
         "productimage": productimage,
-        "prescriptions": prescriptions,
+        "modules": modules,
         "price": price,
         "priceType": priceType
       };

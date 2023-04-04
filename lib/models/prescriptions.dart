@@ -5,6 +5,8 @@ class prescriptions {
   final String prescriptionsname;
   final String prescriptionsdes;
   final String productid;
+  final String moduleid;
+
   final List? material;
 
   const prescriptions({
@@ -13,6 +15,7 @@ class prescriptions {
     required this.productid,
     required this.material,
     required this.prescriptionsdes,
+    required this.moduleid,
   });
 
   static prescriptions fromSnap(DocumentSnapshot snap) {
@@ -24,6 +27,7 @@ class prescriptions {
       productid: snapshot["productid"],
       material: snapshot["material"],
       prescriptionsdes: snapshot["prescriptionsdes"],
+      moduleid: snapshot["moduleid"],
     );
   }
 
@@ -33,5 +37,6 @@ class prescriptions {
         "productid": productid,
         "material": material,
         "prescriptionsdes": prescriptionsdes,
+        "moduleid": moduleid
       };
 }

@@ -121,6 +121,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  expandable_text:
+    dependency: "direct main"
+    description:
+      name: expandable_text
+      sha256: "7d03ea48af6987b20ece232678b744862aa3250d4a71e2aaf1e4af90015d76b1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
+  expansion_tile_card:
+    dependency: "direct main"
+    description:
+      name: expansion_tile_card
+      sha256: "0812d52e4a2effa4957286b9037c81394e1881ac49bcd8f006f631f2ea5ef6eb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -493,14 +509,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.4"
-  rounded_expansion_tile:
-    dependency: "direct main"
-    description:
-      name: rounded_expansion_tile
-      sha256: "1431357a66112026b1799c8c87ab2ec20f86f9b4db9a4b500795d681719bbe54"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.13"
   shared_preferences:
     dependency: "direct main"
     description:

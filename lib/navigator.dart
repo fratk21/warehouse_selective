@@ -52,10 +52,10 @@ class _navigator_screenState extends State<navigator_screen> {
       ), //destination screen
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.view_list,
-        backgroundColor: orange,
+        backgroundColor: lblue,
         children: [
           SpeedDialChild(
-            child: Image.asset("assets/icons/product.png", color: orange),
+            child: Image.asset("assets/icons/product.png", color: lblue),
             label: "Ürün Ekle",
             onTap: () {
               Navigator.push(
@@ -66,14 +66,14 @@ class _navigator_screenState extends State<navigator_screen> {
             },
           ),
           SpeedDialChild(
-            child: Image.asset("assets/icons/raw.png", color: orange),
+            child: Image.asset("assets/icons/raw.png", color: lblue),
             label: "Malzeme Ekle",
             onTap: () {
               print("object");
             },
           ),
           SpeedDialChild(
-            child: Image.asset("assets/icons/package.png", color: orange),
+            child: Image.asset("assets/icons/package.png", color: lblue),
             label: "Paket Oluştur",
             onTap: () {
               print("object");
@@ -101,10 +101,11 @@ class _navigator_screenState extends State<navigator_screen> {
             pageController.jumpToPage(_bottomNavIndex);
           });
         },
-        activeColor: orange,
+        activeColor: lblue,
         blurEffect: true,
-        splashColor: orange,
+        splashColor: platinyum,
         splashRadius: 30,
+        inactiveColor: mediumgray,
       ),
     );
   }

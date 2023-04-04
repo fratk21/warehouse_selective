@@ -10,6 +10,7 @@ import 'package:warehouse_selective/models/prescriptions.dart'
 import 'package:warehouse_selective/services/storage_methods.dart';
 
 import '../models/product.dart' as productModel;
+import '../models/modules.dart' as modulesModel;
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -25,7 +26,7 @@ class firestoreservices {
             productid: productUid,
             productname: productname,
             productimage: "",
-            prescriptions: [],
+            modules: [],
             price: "",
             priceType: "");
         await _firestore
@@ -41,7 +42,7 @@ class firestoreservices {
             productid: productUid,
             productname: productname,
             productimage: photoUrl,
-            prescriptions: [],
+            modules: [],
             price: "",
             priceType: "");
         await _firestore
@@ -65,7 +66,7 @@ class firestoreservices {
             productid: productUid,
             productname: productname,
             productimage: "",
-            prescriptions: [],
+            modules: [],
             price: "",
             priceType: "");
         await _firestore
@@ -81,7 +82,7 @@ class firestoreservices {
             productid: productUid,
             productname: productname,
             productimage: photoUrl,
-            prescriptions: [],
+            modules: [],
             price: "",
             priceType: "");
         await _firestore
@@ -96,12 +97,63 @@ class firestoreservices {
     }
   }
 
+  Future<String?> productAdd_modules(
+      String modulessid,
+      String modulesname,
+      String productUid,
+      List prescriptions,
+      Uint8List? file,
+      String modulesdes) async {
+    try {
+      if (file == null) {
+        modulesModel.modules module = modulesModel.modules(
+            modulesid: modulessid,
+            modulesname: modulesname,
+            modulesdes: modulesdes,
+            modulesimage: "",
+            prescription: prescriptions,
+            price: "",
+            priceType: "");
+        await _firestore
+            .collection("products")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection("product")
+            .doc(productUid)
+            .collection("modules")
+            .doc(modulessid)
+            .set(module.toJson());
+      } else {
+        String photoUrl =
+            await StorageMethods().uploadImageToStorage('product', file, false);
+        modulesModel.modules module = modulesModel.modules(
+            modulesid: modulessid,
+            modulesname: modulesname,
+            modulesimage: photoUrl,
+            modulesdes: modulesdes,
+            prescription: prescriptions,
+            price: "",
+            priceType: "");
+        await _firestore
+            .collection("products")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection("product")
+            .doc(productUid)
+            .collection("modules")
+            .doc(modulessid)
+            .set(module.toJson());
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<String?> productAdd_prescriptions(
       String prescriptionsid,
       String prescriptionsname,
       String productUid,
       List material,
-      String prescriptionsdes) async {
+      String prescriptionsdes,
+      String moduleid) async {
     try {
       prescriptionsModel.prescriptions prescriptions =
           prescriptionsModel.prescriptions(
@@ -109,15 +161,18 @@ class firestoreservices {
               prescriptionsname: prescriptionsname,
               productid: productUid,
               material: material,
-              prescriptionsdes: prescriptionsdes);
+              prescriptionsdes: prescriptionsdes,
+              moduleid: moduleid);
       await _firestore
           .collection("products")
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection("product")
           .doc(productUid)
-          .update({
-        "prescriptions": FieldValue.arrayUnion([prescriptions.toJson()])
-      });
+          .collection("modules")
+          .doc(moduleid)
+          .collection("prescriptions")
+          .doc(prescriptionsid)
+          .set(prescriptions.toJson());
     } catch (e) {
       print(e);
     }
