@@ -35,6 +35,8 @@ class _add_productState extends State<add_product> {
   TextEditingController price = TextEditingController();
   TextEditingController modulesname = TextEditingController();
   TextEditingController modulesdes = TextEditingController();
+  int screensize = 1;
+  int screensizemodul = 1;
 
   bool visibilty = false;
 
@@ -73,7 +75,11 @@ class _add_productState extends State<add_product> {
     super.dispose();
   }
 
-  Future malzemePopup(int index, String prescriptionsid, String productid) {
+  Future malzemePopup(
+    String productid,
+    String modulid,
+    String prescriptionsid,
+  ) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -201,9 +207,19 @@ class _add_productState extends State<add_product> {
                                       MaterialStateProperty.all(lblue),
                                   textStyle: MaterialStateProperty.all(
                                       TextStyle(fontSize: 20))),
-                              onPressed: () {
+                              onPressed: () async {
                                 String materialid = const Uuid().v1();
-
+                                await firestoreservices()
+                                    .prescriptionsAdd_material(
+                                        materialid,
+                                        productid,
+                                        prescriptionsid,
+                                        modulid,
+                                        materialname.text,
+                                        waste.text,
+                                        selectedValue,
+                                        price.text,
+                                        selectedValueprice);
                                 Navigator.pop(context);
                               },
                               child: Text("Ekle")),
@@ -321,7 +337,9 @@ class _add_productState extends State<add_product> {
                                           [],
                                           prescriptiondes.text,
                                           modulid);
-
+                                  setState(() {
+                                    screensizemodul += 1;
+                                  });
                                   // ignore: use_build_context_synchronously
                                   Navigator.pop(context);
                                 }
@@ -338,69 +356,81 @@ class _add_productState extends State<add_product> {
         });
   }
 
-  Widget getCardItem(
-    snap,
-  ) {
-    return Container(
-      child: ExpansionTileCard(
-        expandedTextColor: lblue,
-        leading: snap["modulesimage"] == ""
-            ? Icon(Icons.view_module_rounded)
-            : CircleAvatar(
-                backgroundImage: NetworkImage(snap["modulesimage"]),
-                radius: 20,
+  Widget getCardItem(snap, int index) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        child: ExpansionTileCard(
+          elevation: 10,
+          borderRadius: BorderRadius.circular(20),
+          colorCurve: Curves.easeInOutExpo,
+          duration: Duration(milliseconds: 500),
+          baseColor: darkgray,
+          expandedColor: darkgray,
+          expandedTextColor: white,
+          leading: snap["modulesimage"] == ""
+              ? Icon(
+                  Icons.view_module_rounded,
+                  color: platinyum,
+                )
+              : CircleAvatar(
+                  backgroundImage: NetworkImage(snap["modulesimage"]),
+                  radius: 20,
+                ),
+          title: Column(
+            children: [
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: ExpandableText(
+                    "Modul Name : ${snap["modulesname"]}",
+                    expandText: 'show more',
+                    collapseText: 'show less',
+                    maxLines: 1,
+                    linkColor: lblue,
+                    animation: true,
+                    style: TextStyle(color: platinyum),
+                  )),
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: ExpandableText(
+                    "Modul Description : ${snap["modulesdes"]}",
+                    expandText: 'show more',
+                    collapseText: 'show less',
+                    maxLines: 1,
+                    linkColor: lblue,
+                    animation: true,
+                    style: TextStyle(color: platinyum),
+                  )),
+              SizedBox(
+                height: 10,
               ),
-        title: Column(
-          children: [
-            Align(
-                alignment: Alignment.centerLeft,
-                child: ExpandableText(
-                  "Modul Name : ${snap["modulesname"]}",
-                  expandText: 'show more',
-                  collapseText: 'show less',
-                  maxLines: 1,
-                  linkColor: lblue,
-                  animation: true,
-                )),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: ExpandableText(
-                  "Modul Description : ${snap["modulesdes"]}",
-                  expandText: 'show more',
-                  collapseText: 'show less',
-                  maxLines: 1,
-                  linkColor: lblue,
-                  animation: true,
-                )),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                width: width(context),
-                height: 40,
-                child: ElevatedButton(
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Container(
+                  width: width(context),
+                  height: 40,
+                  child: ElevatedButton(
 
-                    // ignore: prefer_const_constructors
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(18.0),
-                        ),
-                        backgroundColor: silverlake,
-                        textStyle: TextStyle(fontWeight: FontWeight.bold)),
-                    onPressed: () {
-                      RecetePopup(snap["modulesid"]);
-                    },
-                    child: Text("Reçete Oluştur")),
-              ),
-            )
-          ],
-        ),
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            child: StreamBuilder(
+                      // ignore: prefer_const_constructors
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(18.0),
+                          ),
+                          backgroundColor: lblue,
+                          textStyle: TextStyle(fontWeight: FontWeight.bold)),
+                      onPressed: () {
+                        RecetePopup(snap["modulesid"]);
+                      },
+                      child: Text(
+                        "Reçete Oluştur",
+                        style: TextStyle(color: white),
+                      )),
+                ),
+              )
+            ],
+          ),
+          children: [
+            StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('products')
                   .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -420,73 +450,120 @@ class _add_productState extends State<add_product> {
 
                 return snapshot.data!.docs.isEmpty
                     ? Container()
-                    : ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (ctx, index) => Container(
-                            child: getCardDetails(
-                                snapshot.data!.docs[index].data())),
+                    : Container(
+                        height: screensizemodul == 1
+                            ? MediaQuery.of(context).size.height
+                            : MediaQuery.of(context).size.height *
+                                (screensizemodul - screensizemodul / 2),
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (ctx, index) => Container(
+                              child: getCardDetails(snap["modulesid"],
+                                  snapshot.data!.docs[index].data())),
+                        ),
                       );
               },
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Widget getCardDetails(snap) {
+  Widget getCardDetails(String Modulid, snap) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-          child: ExpansionTileCard(
-        leading: Icon(Icons.document_scanner_rounded),
-        title: Column(
-          children: [
-            Align(
-                alignment: Alignment.centerLeft,
-                child: ExpandableText(
-                  "Prescriptions Name : ${snap["prescriptionsname"]}",
-                  expandText: 'show more',
-                  collapseText: 'show less',
-                  maxLines: 1,
-                  linkColor: lblue,
-                  animation: true,
-                )),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: ExpandableText(
-                  "Prescriptions Description : ${snap["prescriptionsdes"]}",
-                  expandText: 'show more',
-                  collapseText: 'show less',
-                  maxLines: 1,
-                  linkColor: lblue,
-                  animation: true,
-                )),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                width: width(context),
-                height: 40,
-                child: ElevatedButton(
-
-                    // ignore: prefer_const_constructors
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(18.0),
-                        ),
-                        backgroundColor: silverlake,
-                        textStyle: TextStyle(fontWeight: FontWeight.bold)),
-                    onPressed: () {},
-                    child: Text("Malzeme Ekle")),
+        child: ExpansionTileCard(
+          leading: Icon(Icons.document_scanner_rounded),
+          title: Column(
+            children: [
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: ExpandableText(
+                    "Prescriptions Name : ${snap["prescriptionsname"]}",
+                    expandText: 'show more',
+                    collapseText: 'show less',
+                    maxLines: 1,
+                    linkColor: lblue,
+                    animation: true,
+                  )),
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: ExpandableText(
+                    "Prescriptions Description : ${snap["prescriptionsdes"]}",
+                    expandText: 'show more',
+                    collapseText: 'show less',
+                    maxLines: 1,
+                    linkColor: lblue,
+                    animation: true,
+                  )),
+              SizedBox(
+                height: 10,
               ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Container(
+                  width: width(context),
+                  height: 40,
+                  child: ElevatedButton(
+
+                      // ignore: prefer_const_constructors
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(18.0),
+                          ),
+                          backgroundColor: silverlake,
+                          textStyle: TextStyle(fontWeight: FontWeight.bold)),
+                      onPressed: () {
+                        malzemePopup(
+                            productuid, Modulid, snap["prescriptionsid"]);
+                      },
+                      child: Text("Malzeme Ekle")),
+                ),
+              )
+            ],
+          ),
+          children: [
+            StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('products')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .collection("product")
+                  .doc(productuid)
+                  .collection("modules")
+                  .doc(snap["modulesid"])
+                  .collection("prescriptions")
+                  .snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                return snapshot.data!.docs.isEmpty
+                    ? Container()
+                    : Container(
+                        height: screensizemodul == 1
+                            ? MediaQuery.of(context).size.height
+                            : MediaQuery.of(context).size.height *
+                                (screensizemodul - screensizemodul / 2),
+                        child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount:
+                                snapshot.data!.docs[0]["material"].lenght,
+                            itemBuilder: (ctx, index) => Container(
+                                  child: Text("data"),
+                                )),
+                      );
+              },
             )
           ],
         ),
-      )),
+      ),
     );
   }
 
@@ -636,6 +713,9 @@ class _add_productState extends State<add_product> {
                                       [],
                                       _image1,
                                       modulesdes.text);
+                                  setState(() {
+                                    screensize += 1;
+                                  });
                                   Navigator.pop(context);
                                 }
                               },
@@ -775,38 +855,42 @@ class _add_productState extends State<add_product> {
                       )
                     : Container(),
                 visibilty
-                    ? Container(
-                        height: MediaQuery.of(context).size.height,
-                        child: StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('products')
-                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                              .collection("product")
-                              .doc(productuid)
-                              .collection("modules")
-                              .snapshots(),
-                          builder: (context,
-                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                                  snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
+                    ? StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection('products')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .collection("product")
+                            .doc(productuid)
+                            .collection("modules")
+                            .snapshots(),
+                        builder: (context,
+                            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
 
-                            return snapshot.data!.docs.isEmpty
-                                ? Container()
-                                : ListView.builder(
+                          return snapshot.data!.docs.isEmpty
+                              ? Container()
+                              : Container(
+                                  height: snapshot.data!.docs.isEmpty
+                                      ? 250
+                                      : (MediaQuery.of(context).size.height *
+                                          screensize),
+                                  child: ListView.builder(
                                     physics:
                                         const NeverScrollableScrollPhysics(),
                                     itemCount: snapshot.data!.docs.length,
                                     itemBuilder: (ctx, index) => Container(
                                         child: getCardItem(
-                                            snapshot.data!.docs[index].data())),
-                                  );
-                          },
-                        ),
+                                            snapshot.data!.docs[index].data(),
+                                            snapshot.data!.docs.length)),
+                                  ),
+                                );
+                        },
                       )
                     : Container()
               ],

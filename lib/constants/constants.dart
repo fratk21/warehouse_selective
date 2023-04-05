@@ -6,7 +6,7 @@ const Color black = Colors.black;
 const Color yellow = Color(0xFFFFD54F);
 // ignore: constant_identifier_names
 const Color grey_yellow = Color.fromARGB(255, 255, 196, 0);
-const Color orange = Color.fromARGB(255, 112, 53, 2);
+const Color orange = Color.fromARGB(255, 255, 119, 0);
 const Color platinyum = Color.fromARGB(255, 224, 225, 221);
 const Color silverlake = Color.fromARGB(255, 119, 141, 169);
 // ignore: constant_identifier_names

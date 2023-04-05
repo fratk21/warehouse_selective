@@ -8,34 +8,11 @@ AppBar customAppbar(bool leaing, BuildContext context, Color colors,
       automaticallyImplyLeading: leaing,
       backgroundColor: colors,
       centerTitle: true,
-      actions: [
-        TextButton.icon(
-            onPressed: ontap,
-            icon: Icon(
-              Icons.save,
-              color: white,
-            ),
-            label: Text(
-              "Kaydet",
-              style: TextStyle(color: white),
-            )),
-      ],
+      actions: [],
       title: Row(
         mainAxisAlignment:
             kIsWeb ? MainAxisAlignment.center : MainAxisAlignment.start,
         children: [
-          InkWell(
-            child: CircleAvatar(
-              backgroundColor: colors,
-              radius: 20,
-              child: const Image(
-                image: AssetImage("assets/icons/package.png"),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
           RichText(
               text: TextSpan(
                   text: label,

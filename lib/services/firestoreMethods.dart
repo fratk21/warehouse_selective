@@ -182,23 +182,37 @@ class firestoreservices {
     String materialid,
     String productid,
     String prescriptionsid,
+    String modulsid,
     String materialname,
     String west,
     String unit,
     String price,
     String priceType,
   ) async {
-    try {} catch (e) {
-      materialModel.material material = materialModel.material(
+    try {
+      materialModel.material materials = materialModel.material(
           materialid: materialid,
           productid: productid,
           prescriptionsid: prescriptionsid,
+          modulesid: modulsid,
           materialname: materialname,
           west: west,
           unit: unit,
           price: price,
           priceType: priceType);
-
+      await _firestore
+          .collection("products")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("product")
+          .doc(productid)
+          .collection("modules")
+          .doc(modulsid)
+          .collection("prescriptions")
+          .doc(prescriptionsid)
+          .update({
+        "material": FieldValue.arrayUnion([materials.toJson()])
+      });
+    } catch (e) {
       print(e);
     }
   }

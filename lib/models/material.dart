@@ -4,6 +4,8 @@ class material {
   final String materialid;
   final String productid;
   final String prescriptionsid;
+  final String modulesid;
+
   final String materialname;
   final String west;
   final String unit;
@@ -14,6 +16,7 @@ class material {
     required this.materialid,
     required this.productid,
     required this.prescriptionsid,
+    required this.modulesid,
     required this.materialname,
     required this.west,
     required this.unit,
@@ -33,6 +36,7 @@ class material {
       priceType: snapshot["priceType"],
       productid: snapshot["productid"],
       prescriptionsid: snapshot["prescriptionsid"],
+      modulesid: snapshot["modulesid"],
     );
   }
 
@@ -45,5 +49,6 @@ class material {
         "priceType": priceType,
         "prescriptionsid": prescriptionsid,
         "productid": productid,
+        "modulesid": modulesid,
       };
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:warehouse_selective/constants/thema_provider.dart';
 
 class products_screen extends StatefulWidget {
   const products_screen({super.key});
@@ -10,9 +12,13 @@ class products_screen extends StatefulWidget {
 class _products_screenState extends State<products_screen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text("data"),
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: Container(
+        child: Center(
+          child: Text("data"),
+        ),
       ),
     );
   }
