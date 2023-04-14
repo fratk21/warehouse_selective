@@ -35,31 +35,38 @@ class _customComboState extends State<customCombo> {
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            widget.text,
-            style: TextStyle(fontSize: widget.textsize),
-          ),
-          SizedBox(
-            width: widget.bosluk,
-          ),
-          DropdownButtonHideUnderline(
-            child: DropdownButton(
-                value: deneme,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    deneme = newValue!;
-                  });
-                },
-                borderRadius: BorderRadius.all(Radius.circular(widget.radius)),
-                iconSize: widget.iconsize,
-                icon: const Icon(Icons.arrow_drop_down_circle_outlined),
-                dropdownColor: widget.color,
-                items: widget.items),
-          ),
-        ],
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 10,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              widget.text,
+              style: TextStyle(fontSize: widget.textsize),
+            ),
+            SizedBox(
+              width: widget.bosluk,
+            ),
+            DropdownButtonHideUnderline(
+              child: DropdownButton(
+                  value: deneme,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      deneme = newValue!;
+                    });
+                  },
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(widget.radius)),
+                  iconSize: widget.iconsize,
+                  icon: const Icon(Icons.arrow_drop_down_circle_outlined),
+                  dropdownColor: widget.color,
+                  items: widget.items),
+            ),
+          ],
+        ),
       ),
     );
   }

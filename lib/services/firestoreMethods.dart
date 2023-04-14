@@ -17,8 +17,8 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 FirebaseStorage storage = FirebaseStorage.instance;
 
 class firestoreservices {
-  Future<String?> productCreate(
-      String productUid, Uint8List? file, String productname) async {
+  Future<String?> productCreate(String productUid, Uint8List? file,
+      String productname, String productdes) async {
     try {
       if (file == null) {
         print("object");
@@ -28,7 +28,8 @@ class firestoreservices {
             productimage: "",
             modules: [],
             price: "",
-            priceType: "");
+            priceType: "",
+            productdes: productdes);
         await _firestore
             .collection("products")
             .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -44,7 +45,8 @@ class firestoreservices {
             productimage: photoUrl,
             modules: [],
             price: "",
-            priceType: "");
+            priceType: "",
+            productdes: productdes);
         await _firestore
             .collection("products")
             .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -57,8 +59,8 @@ class firestoreservices {
     }
   }
 
-  Future<String?> productupdate(
-      String productUid, Uint8List? file, String productname) async {
+  Future<String?> productupdate(String productUid, Uint8List? file,
+      String productname, String productdes) async {
     try {
       if (file == null) {
         print("object");
@@ -68,7 +70,8 @@ class firestoreservices {
             productimage: "",
             modules: [],
             price: "",
-            priceType: "");
+            priceType: "",
+            productdes: productdes);
         await _firestore
             .collection("products")
             .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -84,7 +87,8 @@ class firestoreservices {
             productimage: photoUrl,
             modules: [],
             price: "",
-            priceType: "");
+            priceType: "",
+            productdes: productdes);
         await _firestore
             .collection("products")
             .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -198,8 +202,9 @@ class firestoreservices {
           materialname: materialname,
           west: west,
           unit: unit,
-          price: price,
-          priceType: priceType);
+          price: [],
+          priceType: [],
+          suppliers: []);
       await _firestore
           .collection("products")
           .doc(FirebaseAuth.instance.currentUser!.uid)

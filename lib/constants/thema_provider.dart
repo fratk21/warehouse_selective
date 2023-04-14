@@ -21,16 +21,26 @@ class ThemeProvider extends ChangeNotifier {
 
 class MyThemes {
   static final darkTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.grey.shade900,
-    primaryColor: Colors.black,
-    colorScheme: ColorScheme.dark(),
-    iconTheme: IconThemeData(color: Colors.purple.shade200, opacity: 0.8),
-  );
+      scaffoldBackgroundColor: Colors.grey.shade900,
+      primaryColor: Colors.black,
+      colorScheme: ColorScheme.dark(),
+      iconTheme: IconThemeData(color: Colors.purple.shade200, opacity: 0.8),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.amber)));
 
   static final lightTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.white,
-    primaryColor: Colors.white,
-    colorScheme: ColorScheme.light(),
-    iconTheme: IconThemeData(color: Colors.red, opacity: 0.8),
-  );
+      scaffoldBackgroundColor: Colors.white,
+      primaryColor: Colors.white,
+      colorScheme: ColorScheme.light(),
+      iconTheme: IconThemeData(color: Colors.red, opacity: 0.8),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+              shadowColor: MaterialStateProperty.all<Color>(Colors.black),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
+              ),
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(Colors.lightBlue))));
 }

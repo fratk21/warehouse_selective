@@ -82,23 +82,23 @@ class _inputtextState extends State<inputtext> {
 }
 
 Widget inputtex(
-  BuildContext context,
-  TextEditingController control,
-  double height,
-  double width,
-  int maxline,
-  int maxLengh,
-  String hinttext,
-  IconData icons,
-  TextInputType texttip,
-  bool gizli,
-  Color color,
-  Color color2,
-  double elevation,
-) {
+    BuildContext context,
+    TextEditingController control,
+    double height,
+    double width,
+    int maxline,
+    int maxLengh,
+    String hinttext,
+    IconData icons,
+    TextInputType texttip,
+    bool gizli,
+    Color color,
+    Color color2,
+    double elevation,
+    bool enabled) {
   return Card(
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(18.0),
+      borderRadius: BorderRadius.circular(15.0),
     ),
     elevation: elevation,
     child: Container(
@@ -106,7 +106,7 @@ Widget inputtex(
       width: width,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.all(Radius.circular(18)),
+        borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -123,6 +123,7 @@ Widget inputtex(
           ),
           Expanded(
               child: TextField(
+            enabled: enabled,
             keyboardType: texttip,
             obscureText: gizli,
             maxLines: maxline,

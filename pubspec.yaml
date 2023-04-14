@@ -54,6 +54,7 @@ dependencies:
   syncfusion_flutter_charts: ^21.1.38
   babstrap_settings_screen: ^0.1.5+1
   provider: ^6.0.5
+  math_expressions: ^2.4.0
 
 
 

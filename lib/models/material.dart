@@ -5,14 +5,14 @@ class material {
   final String productid;
   final String prescriptionsid;
   final String modulesid;
-
   final String materialname;
   final String west;
   final String unit;
-  final String price;
-  final String priceType;
+  List? price;
+  List? priceType;
+  List? suppliers;
 
-  const material({
+  material({
     required this.materialid,
     required this.productid,
     required this.prescriptionsid,
@@ -22,6 +22,7 @@ class material {
     required this.unit,
     required this.price,
     required this.priceType,
+    required this.suppliers,
   });
 
   static material fromSnap(DocumentSnapshot snap) {
@@ -37,6 +38,7 @@ class material {
       productid: snapshot["productid"],
       prescriptionsid: snapshot["prescriptionsid"],
       modulesid: snapshot["modulesid"],
+      suppliers: snapshot["suppliers"],
     );
   }
 
@@ -50,5 +52,6 @@ class material {
         "prescriptionsid": prescriptionsid,
         "productid": productid,
         "modulesid": modulesid,
+        "suppliers": suppliers,
       };
 }

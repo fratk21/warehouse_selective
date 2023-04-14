@@ -2,7 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:warehouse_selective/constants/constants.dart';
-import 'package:warehouse_selective/screens/add_products/add_products.dart';
+import 'package:warehouse_selective/screens/add_products/add_product.dart';
 import 'package:warehouse_selective/screens/analysis/analysis_screen.dart';
 import 'package:warehouse_selective/screens/calculator/calculator.dart';
 import 'package:warehouse_selective/screens/products/products.dart';
@@ -61,7 +61,8 @@ class _navigator_screenState extends State<navigator_screen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const add_product(),
+                    builder: (context) =>
+                        const add_product_screen(productid: ""),
                   ));
             },
           ),

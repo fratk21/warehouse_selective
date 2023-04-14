@@ -64,7 +64,6 @@ class _settings_screenState extends State<settings_screen> {
                             Provider.of<ThemeProvider>(context, listen: false);
                         provider.toggleTheme(value);
                       });
-                      print(themeProvider.isDarkMode);
                     },
                   ),
                 ),

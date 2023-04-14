@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class product {
   final String productid;
   final String productname;
+  final String productdes;
   final String? productimage;
   final String price;
   final String priceType;
@@ -15,6 +16,7 @@ class product {
     required this.modules,
     required this.price,
     required this.priceType,
+    required this.productdes,
   });
 
   static product fromSnap(DocumentSnapshot snap) {
@@ -26,6 +28,7 @@ class product {
         productimage: snapshot["productimage"],
         modules: snapshot["modules"],
         price: snapshot["price"],
+        productdes: snapshot["productdes"],
         priceType: snapshot["priceType"]);
   }
 
@@ -35,6 +38,7 @@ class product {
         "productimage": productimage,
         "modules": modules,
         "price": price,
-        "priceType": priceType
+        "priceType": priceType,
+        "productdes": productdes
       };
 }

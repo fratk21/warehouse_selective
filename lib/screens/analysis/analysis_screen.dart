@@ -27,27 +27,31 @@ class _analysis_screenState extends State<analysis_screen> {
     setState(() {
       isloading = true;
     });
+
     dolar = await finance().fetchDolar();
     euro = await finance().fetcheuro();
     sterlin = await finance().fetchsterlin();
     conver = double.parse(dolar!) / double.parse(euro!);
+
     setState(() {
-      dolar;
-      isloading = false;
+      if (mounted) {
+        isloading = false;
+      }
     });
   }
 
   @override
   void initState() {
     doviz();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar:
             customAppbar(false, context, lblue, "Analysis", true, () => null),
         body: SingleChildScrollView(
@@ -59,6 +63,7 @@ class _analysis_screenState extends State<analysis_screen> {
                   Container(
                     height: 150,
                     child: Card(
+                      color: Theme.of(context).cardColor,
                       elevation: 10,
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(15))),
@@ -75,10 +80,9 @@ class _analysis_screenState extends State<analysis_screen> {
                                       children: [
                                         Text(
                                           "Dolar",
-                                          style: TextStyle(
-                                              color: black,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge,
                                         ),
                                         Text(
                                           dolar.toString(),
@@ -96,12 +100,11 @@ class _analysis_screenState extends State<analysis_screen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        const Text(
+                                        Text(
                                           "Sterlin",
-                                          style: TextStyle(
-                                              color: black,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge,
                                         ),
                                         Text(
                                           sterlin.toString(),
@@ -123,12 +126,11 @@ class _analysis_screenState extends State<analysis_screen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        const Text(
+                                        Text(
                                           "Euro",
-                                          style: TextStyle(
-                                              color: black,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge,
                                         ),
                                         Text(
                                           "€ " + euro.toString(),
@@ -146,12 +148,11 @@ class _analysis_screenState extends State<analysis_screen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        const Text(
+                                        Text(
                                           "\$/€",
-                                          style: TextStyle(
-                                              color: black,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge,
                                         ),
                                         Text(
                                           conver.toStringAsFixed(3),
