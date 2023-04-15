@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:warehouse_selective/constants/constants.dart';
 import 'package:warehouse_selective/screens/add_products/add_prescription.dart';
 
 Widget modules_card_product_add_screen(
@@ -13,8 +14,11 @@ Widget modules_card_product_add_screen(
           productname);
     },
     child: Card(
+      color: Theme.of(context).cardColor,
+      elevation: 5,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(60), bottomRight: Radius.circular(60)),
       ),
       child: Column(
         children: [
@@ -26,60 +30,62 @@ Widget modules_card_product_add_screen(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  elevation: 5,
-                  child: snap["modulesimage"] == ""
-                      ? Icon(Icons.document_scanner_sharp)
-                      : Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
+                child: snap["modulesimage"] == ""
+                    ? Icon(
+                        Icons.document_scanner_rounded,
+                        color: Theme.of(context).iconTheme.color,
+                        size: 50,
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                        ),
+                        child: SizedBox.fromSize(
+                          size: Size.fromRadius(48),
                           child: Image(
                               image: NetworkImage(snap["modulesimage"]),
-                              fit: BoxFit.scaleDown),
+                              fit: BoxFit.cover),
                         ),
-                ),
+                      ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                      ),
-                      width: 250,
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Container(
+                      width: width(context) - 140,
                       height: 30,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0),
-                        ),
-                        elevation: 5,
-                        child: Center(child: Text(snap["modulesname"])),
-                      ),
-                    ),
-                    Container(
-                      width: 250,
-                      height: 70,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        color: Theme.of(context).appBarTheme.backgroundColor,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(50.0),
+                            bottomLeft: Radius.circular(0.0),
+                            bottomRight: Radius.circular(50),
+                            topRight: Radius.circular(0)),
                       ),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10.0, left: 8),
+                          child: Text(
+                            snap["modulesname"],
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
                         ),
-                        elevation: 5,
-                        child: Center(
-                            child: Text(snap["modulesdes"] == ""
-                                ? "Açıklama Girilmemiş"
-                                : snap["modulesdes"])),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        width: 250,
+                        child: Text(
+                          snap["modulesdes"] == ""
+                              ? "Açıklama Girilmemiş"
+                              : snap["modulesdes"],
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        )),
+                  ),
+                ],
               )
             ],
           ),
@@ -131,16 +137,19 @@ Future cards_options(
     builder: (context) {
       return Wrap(
         children: [
-          const Center(
+          Center(
             child: Icon(
               Icons.linear_scale_outlined,
-              color: Colors.black,
+              color: Theme.of(context).iconTheme.color,
               size: 25,
             ),
           ),
           ListTile(
               title: TextButton.icon(
-                  icon: Icon(Icons.create_new_folder),
+                  icon: Icon(
+                    Icons.create_new_folder,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
                   onPressed: () async {
                     Navigator.pop(context);
                     Navigator.push(
@@ -154,7 +163,25 @@ Future cards_options(
                         ));
                   },
                   label: Center(
-                    child: Text("Reçete Oluştur"),
+                    child: Text(
+                      "Reçete Oluştur",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ))),
+          ListTile(
+              title: TextButton.icon(
+                  icon: Icon(
+                    Icons.edit_document,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  label: Center(
+                    child: Text(
+                      "Reçete Oluştur",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ))),
         ],
       );

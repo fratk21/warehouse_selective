@@ -19,33 +19,6 @@ class analysis_screen extends StatefulWidget {
 }
 
 class _analysis_screenState extends State<analysis_screen> {
-  String? dolar, euro, sterlin;
-  double conver = 0;
-  bool isloading = false;
-
-  void doviz() async {
-    setState(() {
-      isloading = true;
-    });
-
-    dolar = await finance().fetchDolar();
-    euro = await finance().fetcheuro();
-    sterlin = await finance().fetchsterlin();
-    conver = double.parse(dolar!) / double.parse(euro!);
-
-    setState(() {
-      if (mounted) {
-        isloading = false;
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    doviz();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -71,101 +44,104 @@ class _analysis_screenState extends State<analysis_screen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          "Dolar",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        Text(
-                                          dolar.toString(),
-                                          style: const TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 50,
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Sterlin",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        Text(
-                                          sterlin.toString(),
-                                          style: const TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Euro",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        Text(
-                                          "€ " + euro.toString(),
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 50,
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "\$/€",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        Text(
-                                          conver.toStringAsFixed(3),
-                                          style: const TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
+                            child: Container(
+                              width: 172,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text(
+                                            "Dolar",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge,
+                                          ),
+                                          Text(
+                                            globaldolar.toString(),
+                                            style: const TextStyle(
+                                                color: Colors.green,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 50,
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Sterlin",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge,
+                                          ),
+                                          Text(
+                                            globalsterlin.toString(),
+                                            style: const TextStyle(
+                                                color: Colors.green,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Euro",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge,
+                                          ),
+                                          Text(
+                                            globaleuro.toString(),
+                                            style: TextStyle(
+                                                color: Colors.green,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 50,
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "\$/€",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge,
+                                          ),
+                                          Text(
+                                            "${(globaldolar / globaleuro).toStringAsFixed(3)}",
+                                            style: const TextStyle(
+                                                color: Colors.green,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -173,7 +149,7 @@ class _analysis_screenState extends State<analysis_screen> {
                           ),
                           Container(
                             height: double.infinity,
-                            width: 171,
+                            width: width(context) - 222,
                             decoration: const BoxDecoration(
                               color: Colors.blue,
                               borderRadius: BorderRadius.only(

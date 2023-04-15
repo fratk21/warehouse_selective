@@ -131,9 +131,9 @@ Widget inputtex(
             cursorColor: orange,
             decoration: InputDecoration(
               labelText: hinttext,
-              labelStyle: TextStyle(color: Colors.black),
               border: InputBorder.none,
             ),
+            style: TextStyle(),
           )),
         ],
       ),

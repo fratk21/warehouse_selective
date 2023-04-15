@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 class customCombo extends StatefulWidget {
   final String text;
   final double textsize;
-  final String selectedValue;
+  late String? selectedValue;
   final Color color;
   final List<DropdownMenuItem<String>> items;
   final double iconsize;
   final double radius;
   final double bosluk;
-  const customCombo(
+  customCombo(
       {Key? key,
       required this.bosluk,
       required this.color,
@@ -28,7 +28,6 @@ class customCombo extends StatefulWidget {
 }
 
 class _customComboState extends State<customCombo> {
-  late String deneme = widget.selectedValue;
   @override
   Widget build(
     BuildContext context,
@@ -52,10 +51,11 @@ class _customComboState extends State<customCombo> {
             ),
             DropdownButtonHideUnderline(
               child: DropdownButton(
-                  value: deneme,
+                  value: widget.selectedValue,
                   onChanged: (String? newValue) {
                     setState(() {
-                      deneme = newValue!;
+                      widget.selectedValue = newValue!;
+                      print(widget.selectedValue);
                     });
                   },
                   borderRadius:

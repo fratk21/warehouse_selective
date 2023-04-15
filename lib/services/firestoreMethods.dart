@@ -190,8 +190,9 @@ class firestoreservices {
     String materialname,
     String west,
     String unit,
-    String price,
-    String priceType,
+    List price,
+    List priceType,
+    List suppliers,
   ) async {
     try {
       materialModel.material materials = materialModel.material(
@@ -202,9 +203,9 @@ class firestoreservices {
           materialname: materialname,
           west: west,
           unit: unit,
-          price: [],
-          priceType: [],
-          suppliers: []);
+          price: price,
+          priceType: priceType,
+          suppliers: suppliers);
       await _firestore
           .collection("products")
           .doc(FirebaseAuth.instance.currentUser!.uid)

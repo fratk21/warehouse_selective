@@ -7,6 +7,7 @@ import 'package:warehouse_selective/constants/thema_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:warehouse_selective/navigator.dart';
 import 'package:warehouse_selective/screens/onboarding/onboarding_pageview.dart';
+import 'package:warehouse_selective/services/finance.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    finance().fetchDolar();
+    finance().fetcheuro();
+    finance().fetchsterlin();
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
         create: (context) => ThemeProvider(),

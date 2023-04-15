@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:warehouse_selective/constants/constants.dart';
+import 'package:warehouse_selective/screens/add_products/add_material.dart';
+import 'package:warehouse_selective/screens/add_products/add_material_screen.dart';
 import 'package:warehouse_selective/utils/utils.dart';
 
+import '../services/firestoreMethods.dart';
 import '../services/material_finance.dart';
 import '../widgets/combo.dart';
 import '../widgets/inputText.dart';
@@ -21,10 +24,23 @@ class prescription_add_card extends StatefulWidget {
 
 class _prescription_add_cardState extends State<prescription_add_card> {
   String selectedValue = "Kg";
-  String selectedValueprice = "TL";
+  String selectedValueprice1 = "TL";
+  String selectedValueprice2 = "TL";
+  String selectedValueprice3 = "TL";
+
   TextEditingController materialname = TextEditingController();
+  TextEditingController tedarik1 = TextEditingController();
+  TextEditingController tedarik2 = TextEditingController();
+  TextEditingController tedarik3 = TextEditingController();
+  TextEditingController tedarik1price = TextEditingController();
+  TextEditingController tedarik2price = TextEditingController();
+  TextEditingController tedarik3price = TextEditingController();
+  TextEditingController tedarik1ype = TextEditingController();
+  TextEditingController tedarik2type = TextEditingController();
+  TextEditingController tedarik3type = TextEditingController();
+
   TextEditingController waste = TextEditingController();
-  TextEditingController price = TextEditingController();
+
   Uint8List? _image;
   selectImage(int a, int b) async {
     Uint8List? im;
@@ -76,101 +92,154 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Card(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Stack(
-                              children: [
-                                Container(
-                                  width: width(context),
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(20)),
-                                      image: _image != null
-                                          ? DecorationImage(
-                                              image: MemoryImage(_image!),
-                                              fit: BoxFit.fitWidth,
-                                            )
-                                          : const DecorationImage(
-                                              image: AssetImage(
-                                                  "assets/add_product.jpg"),
-                                              fit: BoxFit.fitWidth,
-                                            )),
-                                ),
-                                Positioned(
-                                  top: 45,
-                                  // bottom: 100,
-                                  left: 100,
-                                  child: IconButton(
-                                    iconSize: 60,
-                                    onPressed: () => imagesecenek(1),
-                                    icon: const Icon(
-                                      Icons.add_a_photo,
-                                      color: silverlake,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
                           Padding(
-                            padding:
-                                EdgeInsets.only(left: 20.0, right: 20, top: 20),
-                            child: inputtext(
-                              context: context,
-                              control: materialname,
-                              height: 50,
-                              width: width(context),
-                              maxline: 1,
-                              maxLengh: 60,
-                              hinttext: "Malzeme Adı",
-                              icons: Icons.chair_alt,
-                              texttip: TextInputType.name,
-                              gizli: false,
-                              color: white,
-                              color2: lblue,
+                            padding: const EdgeInsets.all(8.0),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
                               elevation: 10,
+                              child: Container(
+                                height: 50,
+                                width: width(context),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).cardColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Icon(
+                                      Icons.chair_alt,
+                                      color: Theme.of(context).iconTheme.color,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Expanded(
+                                        child: TextField(
+                                      keyboardType: TextInputType.name,
+                                      obscureText: false,
+                                      maxLines: 1,
+                                      controller: materialname,
+                                      cursorColor:
+                                          Theme.of(context).primaryColorDark,
+                                      decoration: InputDecoration(
+                                        labelText: "Material Adı",
+                                        border: InputBorder.none,
+                                      ),
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    )),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                           Row(
                             children: [
                               Padding(
-                                padding: EdgeInsets.only(left: 20),
-                                child: inputtext(
-                                  context: context,
-                                  control: waste,
-                                  height: 50,
-                                  width: width(context) / 3,
-                                  maxline: 1,
-                                  maxLengh: 60,
-                                  hinttext: "Sarfiyat",
-                                  icons: Icons.unarchive_outlined,
-                                  texttip: TextInputType.number,
-                                  gizli: false,
-                                  color: white,
-                                  color2: lblue,
+                                padding: const EdgeInsets.all(8.0),
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
                                   elevation: 10,
+                                  child: Container(
+                                    height: 50,
+                                    width: (width(context) / 2) - 60,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).cardColor,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(15)),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Icon(
+                                          Icons.view_module_rounded,
+                                          color:
+                                              Theme.of(context).iconTheme.color,
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Expanded(
+                                            child: TextField(
+                                          keyboardType: TextInputType.name,
+                                          obscureText: false,
+                                          maxLines: 1,
+                                          controller: waste,
+                                          cursorColor: Theme.of(context)
+                                              .primaryColorDark,
+                                          decoration: InputDecoration(
+                                            labelText: "Sarfiyat",
+                                            border: InputBorder.none,
+                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
+                                        )),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                              customCombo(
-                                  bosluk: 30,
-                                  color: white,
-                                  iconsize: 20,
-                                  items: dropdownItems,
-                                  selectedValue: selectedValue,
-                                  radius: 20,
-                                  text: "Birim",
-                                  textsize: 15),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 8),
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  elevation: 10,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Birim",
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton(
+                                            value: selectedValue,
+                                            onChanged: (String? newValue) {
+                                              selectedValue = newValue!;
+                                              setState(() {
+                                                selectedValue;
+                                              });
+                                            },
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                            iconSize: 20,
+                                            icon: const Icon(Icons
+                                                .arrow_drop_down_circle_outlined),
+                                            dropdownColor:
+                                                Theme.of(context).cardColor,
+                                            items: dropdownItems),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 20.0, right: 20),
                             child: inputtext(
                               context: context,
-                              control: materialname,
+                              control: tedarik1,
                               height: 50,
                               width: width(context),
                               maxline: 1,
@@ -192,7 +261,7 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                                 ),
                                 child: inputtext(
                                   context: context,
-                                  control: price,
+                                  control: tedarik1price,
                                   height: 50,
                                   width: width(context) / 3,
                                   maxline: 1,
@@ -211,7 +280,7 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                                   color: white,
                                   iconsize: 20,
                                   items: dropdownpricetype,
-                                  selectedValue: selectedValueprice,
+                                  selectedValue: selectedValueprice1,
                                   radius: 20,
                                   text: "Cinsi",
                                   textsize: 15),
@@ -221,7 +290,7 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                             padding: EdgeInsets.only(left: 20.0, right: 20),
                             child: inputtext(
                               context: context,
-                              control: materialname,
+                              control: tedarik2,
                               height: 50,
                               width: width(context),
                               maxline: 1,
@@ -243,7 +312,7 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                                 ),
                                 child: inputtext(
                                   context: context,
-                                  control: price,
+                                  control: tedarik2price,
                                   height: 50,
                                   width: width(context) / 3,
                                   maxline: 1,
@@ -262,7 +331,7 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                                   color: white,
                                   iconsize: 20,
                                   items: dropdownpricetype,
-                                  selectedValue: selectedValueprice,
+                                  selectedValue: selectedValueprice2,
                                   radius: 20,
                                   text: "Cinsi",
                                   textsize: 15),
@@ -272,7 +341,7 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                             padding: EdgeInsets.only(left: 20.0, right: 20),
                             child: inputtext(
                               context: context,
-                              control: materialname,
+                              control: tedarik3,
                               height: 50,
                               width: width(context),
                               maxline: 1,
@@ -294,7 +363,7 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                                 ),
                                 child: inputtext(
                                   context: context,
-                                  control: price,
+                                  control: tedarik3price,
                                   height: 50,
                                   width: width(context) / 3,
                                   maxline: 1,
@@ -313,7 +382,7 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                                   color: white,
                                   iconsize: 20,
                                   items: dropdownpricetype,
-                                  selectedValue: selectedValueprice,
+                                  selectedValue: selectedValueprice3,
                                   radius: 20,
                                   text: "Cinsi",
                                   textsize: 15),
@@ -332,10 +401,48 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                                           TextStyle(fontSize: 20))),
                                   onPressed: () async {
                                     String materialid = const Uuid().v1();
-                                    if (materialname.text.isEmpty) {
-                                      showsnackbar(context, "text",
+                                    if (materialname.text.isEmpty ||
+                                        waste.text.isEmpty ||
+                                        tedarik1.text.isEmpty ||
+                                        tedarik1price.text.isEmpty) {
+                                      showsnackbar(
+                                          context,
+                                          "Lütfen boş alanları doldurunuz",
                                           AnimatedSnackBarType.error);
-                                    } else {}
+                                    } else {
+                                      String materialid = const Uuid().v1();
+                                      List<String> price = [
+                                        tedarik1price.text,
+                                        tedarik2price.text,
+                                        tedarik3price.text
+                                      ];
+                                      print(selectedValueprice1);
+
+                                      List<String> pricetype = [
+                                        selectedValueprice1,
+                                        selectedValueprice2,
+                                        selectedValueprice3,
+                                      ];
+                                      List<String> sup = [
+                                        tedarik1.text,
+                                        tedarik2.text,
+                                        tedarik3.text
+                                      ];
+
+                                      await firestoreservices()
+                                          .prescriptionsAdd_material(
+                                              materialid,
+                                              widget.snap["productid"],
+                                              widget.snap["prescriptionsid"],
+                                              widget.snap["moduleid"],
+                                              materialname.text,
+                                              waste.text,
+                                              selectedValue,
+                                              price,
+                                              pricetype,
+                                              sup);
+                                    }
+                                    Navigator.pop(context);
                                   },
                                   child: Text("Malzemeyi Reçeteye Ekle")),
                             ),
@@ -394,13 +501,68 @@ class _prescription_add_cardState extends State<prescription_add_card> {
     );
   }
 
+  Future secenek(snap) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            Center(
+              child: Icon(
+                Icons.linear_scale_outlined,
+                color: Theme.of(context).iconTheme.color,
+                size: 25,
+              ),
+            ),
+            ListTile(
+                tileColor: Theme.of(context).cardColor,
+                title: TextButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => add_material_per_screen(
+                              snap: snap,
+                            ),
+                          ));
+                    },
+                    child: Center(
+                      child: Text(
+                        "Malzeme Ekle",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ))),
+            ListTile(
+                tileColor: Theme.of(context).cardColor,
+                title: TextButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
+                    child: Center(
+                      child: Text(
+                        "Düzenle",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ))),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        malzemePopup();
+        secenek(widget.snap);
       },
       child: Card(
+        color: Theme.of(context).cardColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(60), bottomRight: Radius.circular(60)),
+        ),
         elevation: 5,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -408,34 +570,67 @@ class _prescription_add_cardState extends State<prescription_add_card> {
             children: [
               Container(
                 height: 50,
-                child: Card(
-                    elevation: 5,
-                    child:
-                        Center(child: Text(widget.snap["prescriptionsname"]))),
-              ),
-              Container(
-                height: 70,
-                child: Card(
-                    elevation: 5,
-                    child:
-                        Center(child: Text(widget.snap["prescriptionsdes"]))),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).appBarTheme.backgroundColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      bottomLeft: Radius.circular(0),
+                      bottomRight: Radius.circular(50),
+                      topRight: Radius.circular(0)),
+                ),
+                child: Center(
+                    child: Text(
+                  widget.snap["prescriptionsname"],
+                  style: Theme.of(context).textTheme.bodyMedium,
+                )),
               ),
               Container(
                 height: 50,
-                child: Card(
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Malzeme Sayısı"),
-                          Text(widget.snap["material"].length.toString()),
-                          IconButton(
-                              onPressed: () {}, icon: Icon(Icons.shape_line))
-                        ],
+                child: Center(
+                    child: Text(
+                  widget.snap["prescriptionsdes"] == ""
+                      ? "Açıklama Girilmemiş"
+                      : widget.snap["prescriptionsdes"],
+                  style: Theme.of(context).textTheme.bodyMedium,
+                )),
+              ),
+              Container(
+                height: 50,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Malzeme Sayısı",
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                    )),
+                      Text(
+                        widget.snap["material"].length.toString(),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => add_material_screen(
+                                    snap: widget.snap,
+                                    moduleid: widget.snap["moduleid"],
+                                    presid: widget.snap["prescriptionsid"],
+                                    productid: widget.snap["productid"],
+                                    itemcount: widget.snap["material"].length,
+                                    presname: widget.snap["prescriptionsname"],
+                                  ),
+                                ));
+                          },
+                          icon: Icon(
+                            Icons.account_tree,
+                            color: Theme.of(context).iconTheme.color,
+                          ))
+                    ],
+                  ),
+                ),
               ),
               //  Container(
               //    height: 40,

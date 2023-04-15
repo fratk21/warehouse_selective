@@ -186,39 +186,97 @@ class _add_product_screenState extends State<add_product_screen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 8.0, right: 8),
-                        child: inputtext(
-                          context: context,
-                          control: modulesname,
-                          height: 50,
-                          width: width(context),
-                          maxline: 1,
-                          maxLengh: 40,
-                          hinttext: "Modül Adı",
-                          icons: Icons.document_scanner_sharp,
-                          texttip: TextInputType.name,
-                          gizli: false,
-                          color: white,
-                          color2: lblue,
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
                           elevation: 10,
+                          child: Container(
+                            height: 50,
+                            width: width(context),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(
+                                  Icons.view_module_rounded,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                    child: TextField(
+                                  keyboardType: TextInputType.name,
+                                  obscureText: false,
+                                  maxLines: 1,
+                                  controller: modulesname,
+                                  cursorColor:
+                                      Theme.of(context).primaryColorDark,
+                                  decoration: InputDecoration(
+                                    labelText: "Modül Adı",
+                                    border: InputBorder.none,
+                                  ),
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                )),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 8.0, right: 8),
-                        child: inputtext(
-                          context: context,
-                          control: modulesdes,
-                          height: 100,
-                          width: width(context),
-                          maxline: 5,
-                          maxLengh: 150,
-                          hinttext: "Açıklama",
-                          icons: Icons.description,
-                          texttip: TextInputType.name,
-                          gizli: false,
-                          color: white,
-                          color2: lblue,
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
                           elevation: 10,
+                          child: Container(
+                            height: 100,
+                            width: width(context),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(
+                                  Icons.view_module_outlined,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                    child: TextField(
+                                  keyboardType: TextInputType.name,
+                                  obscureText: false,
+                                  maxLines: 3,
+                                  controller: modulesdes,
+                                  cursorColor:
+                                      Theme.of(context).primaryColorDark,
+                                  decoration: InputDecoration(
+                                    labelText: "Modül Açıklaması",
+                                    border: InputBorder.none,
+                                  ),
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                )),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                       Padding(
@@ -245,12 +303,15 @@ class _add_product_screenState extends State<add_product_screen> {
                                       [],
                                       _image1,
                                       modulesdes.text);
+                                  Navigator.pop(context);
                                 }
 
-                                Navigator.pop(context);
                                 _image1 = null;
                               },
-                              child: Text("Modul oluştur")),
+                              child: Text(
+                                "Modul oluştur",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              )),
                         ),
                       )
                     ],
@@ -303,7 +364,7 @@ class _add_product_screenState extends State<add_product_screen> {
                       }
                     },
                     child: Center(
-                      child: Text("galeriden yükle"),
+                      child: Text("Galeriden yükle"),
                     ))),
           ],
         );
@@ -326,7 +387,10 @@ class _add_product_screenState extends State<add_product_screen> {
 
     //query
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        title: Text("Ürün Oluşturma Ekranı"),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -374,39 +438,95 @@ class _add_product_screenState extends State<add_product_screen> {
                 SizedBox(
                   height: 10,
                 ),
-                inputtex(
-                    context,
-                    productname,
-                    50,
-                    width(context),
-                    1,
-                    60,
-                    "Ürün Adı",
-                    Icons.chair,
-                    TextInputType.name,
-                    false,
-                    white,
-                    silverlake,
-                    10,
-                    !isvisibil ? true : false),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  elevation: 10,
+                  child: Container(
+                    height: 50,
+                    width: width(context),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          Icons.chair,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                            child: TextField(
+                          enabled: !isvisibil ? true : false,
+                          keyboardType: TextInputType.name,
+                          obscureText: false,
+                          maxLines: 1,
+                          controller: productname,
+                          cursorColor: Theme.of(context).primaryColorDark,
+                          decoration: InputDecoration(
+                            labelText: "Ürün Adı",
+                            border: InputBorder.none,
+                          ),
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        )),
+                      ],
+                    ),
+                  ),
+                ),
                 SizedBox(
                   height: 10,
                 ),
-                inputtex(
-                    context,
-                    productdes,
-                    150,
-                    width(context),
-                    4,
-                    60,
-                    "Ürün Açıklaması",
-                    Icons.description_rounded,
-                    TextInputType.name,
-                    false,
-                    white,
-                    silverlake,
-                    10,
-                    !isvisibil ? true : false),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  elevation: 10,
+                  child: Container(
+                    height: 100,
+                    width: width(context),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          Icons.chair,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                            child: TextField(
+                          enabled: !isvisibil ? true : false,
+                          keyboardType: TextInputType.name,
+                          obscureText: false,
+                          maxLines: 3,
+                          controller: productdes,
+                          cursorColor: Theme.of(context).primaryColorDark,
+                          decoration: InputDecoration(
+                            labelText: "Ürün Açıklaması",
+                            border: InputBorder.none,
+                          ),
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        )),
+                      ],
+                    ),
+                  ),
+                ),
                 Container(
                   child: !isvisibil
                       ? Padding(
@@ -483,7 +603,7 @@ class _add_product_screenState extends State<add_product_screen> {
                       );
                     }
                     return Container(
-                      height: snapshot.data!.docs.length * 250,
+                      height: snapshot.data!.docs.length * 350,
                       child: ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: snapshot.data!.docs.length == 0
@@ -495,10 +615,11 @@ class _add_product_screenState extends State<add_product_screen> {
                             result = Container();
                           } else {
                             result = modules_card_product_add_screen(
-                                context,
-                                snapshot.data!.docs[index].data(),
-                                productname.text,
-                                productuid);
+                              context,
+                              snapshot.data!.docs[index].data(),
+                              productname.text,
+                              productuid,
+                            );
                           }
 
                           return result;

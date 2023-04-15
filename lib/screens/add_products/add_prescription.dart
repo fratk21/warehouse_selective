@@ -37,6 +37,7 @@ class _add_prescription_screenState extends State<add_prescription_screen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).cardColor,
             elevation: 10,
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -48,57 +49,109 @@ class _add_prescription_screenState extends State<add_prescription_screen> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Padding(
-                        padding:
-                            EdgeInsets.only(left: 20.0, right: 20, top: 20),
-                        child: inputtext(
-                          context: context,
-                          control: prescriptionsname,
-                          height: 50,
-                          width: width(context),
-                          maxline: 1,
-                          maxLengh: 40,
-                          hinttext: "Reçete Adı",
-                          icons: Icons.document_scanner_sharp,
-                          texttip: TextInputType.name,
-                          gizli: false,
-                          color: white,
-                          color2: lblue,
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
                           elevation: 10,
+                          child: Container(
+                            height: 60,
+                            width: width(context),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(
+                                  Icons.discount_rounded,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                    child: TextField(
+                                  keyboardType: TextInputType.name,
+                                  obscureText: false,
+                                  maxLines: 2,
+                                  controller: prescriptionsname,
+                                  cursorColor:
+                                      Theme.of(context).primaryColorDark,
+                                  decoration: InputDecoration(
+                                    labelText: "Reçete Adı",
+                                    border: InputBorder.none,
+                                  ),
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                )),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 20.0, right: 20),
-                        child: inputtext(
-                          context: context,
-                          control: prescriptiondes,
-                          height: 100,
-                          width: width(context),
-                          maxline: 5,
-                          maxLengh: 150,
-                          hinttext: "Açıklama",
-                          icons: Icons.description,
-                          texttip: TextInputType.name,
-                          gizli: false,
-                          color: white,
-                          color2: lblue,
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
                           elevation: 10,
+                          child: Container(
+                            height: 100,
+                            width: width(context),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(
+                                  Icons.dashboard_customize_rounded,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                    child: TextField(
+                                  keyboardType: TextInputType.name,
+                                  obscureText: false,
+                                  maxLines: 3,
+                                  controller: prescriptiondes,
+                                  cursorColor:
+                                      Theme.of(context).primaryColorDark,
+                                  decoration: InputDecoration(
+                                    labelText: "Reçete Açıklaması",
+                                    border: InputBorder.none,
+                                  ),
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                )),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.only(
+                            left: 20.0, right: 20, top: 10, bottom: 10),
                         child: Container(
                           width: width(context),
                           child: ElevatedButton(
 
                               // ignore: prefer_const_constructors
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 10,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(20.0),
-                                  ),
-                                  textStyle:
-                                      TextStyle(fontWeight: FontWeight.bold)),
+                              style:
+                                  Theme.of(context).elevatedButtonTheme.style,
                               onPressed: () async {
                                 if (prescriptionsname.text.isEmpty) {
                                   showsnackbar(
@@ -135,23 +188,31 @@ class _add_prescription_screenState extends State<add_prescription_screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.productname),
+        title: Text(
+          widget.productname,
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          child: Center(
-            child: Column(
-              children: [
-                Container(
-                  height: 40,
-                  width: MediaQuery.of(context).size.width,
-                  child: Card(
-                    elevation: 5,
-                    child: Center(child: Text(widget.modulesname)),
-                  ),
+      body: Container(
+        child: Center(
+          child: Column(
+            children: [
+              Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).appBarTheme.backgroundColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(0),
+                      bottomLeft: Radius.circular(100.0),
+                      bottomRight: Radius.circular(100),
+                      topRight: Radius.circular(0)),
                 ),
-                StreamBuilder(
+                width: MediaQuery.of(context).size.width,
+                child: Center(child: Text(widget.modulesname)),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('products')
                       .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -170,7 +231,7 @@ class _add_prescription_screenState extends State<add_prescription_screen> {
                       );
                     }
                     return Container(
-                      height: snapshot.data!.docs.length * 350,
+                      height: snapshot.data!.docs.length * 250,
                       child: ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: snapshot.data!.docs.length == 0
@@ -191,9 +252,9 @@ class _add_prescription_screenState extends State<add_prescription_screen> {
                       ),
                     );
                   },
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
       ),

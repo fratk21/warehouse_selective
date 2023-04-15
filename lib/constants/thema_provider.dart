@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:warehouse_selective/constants/constants.dart';
 
 class ThemeProvider extends ChangeNotifier {
   ThemeMode themeMode = ThemeMode.system;
@@ -21,26 +22,33 @@ class ThemeProvider extends ChangeNotifier {
 
 class MyThemes {
   static final darkTheme = ThemeData(
-      scaffoldBackgroundColor: Colors.grey.shade900,
-      primaryColor: Colors.black,
+      appBarTheme: AppBarTheme(backgroundColor: Color(0xFF212121)),
+      cardColor: Color(0xFF424242),
+      scaffoldBackgroundColor: Color(0xFF212121),
+      primaryColor: Color(0xFF212121),
       colorScheme: ColorScheme.dark(),
-      iconTheme: IconThemeData(color: Colors.purple.shade200, opacity: 0.8),
+      iconTheme: IconThemeData(color: Color(0xFFBDBDBD)),
       elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.amber)));
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color(0xFF2196F3),
+          foregroundColor: Colors.white,
+          textStyle: TextStyle(color: white),
+        ),
+      ));
 
   static final lightTheme = ThemeData(
-      scaffoldBackgroundColor: Colors.white,
+      appBarTheme: AppBarTheme(backgroundColor: Color(0xFF009688)),
+      cardColor: Color(0xFFFFFFFF),
+      scaffoldBackgroundColor: Color(0xFFF5F5F5),
       primaryColor: Colors.white,
       colorScheme: ColorScheme.light(),
-      iconTheme: IconThemeData(color: Colors.red, opacity: 0.8),
+      textTheme: TextTheme(),
+      iconTheme: IconThemeData(color: Color(0xFF757575)),
       elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-              shadowColor: MaterialStateProperty.all<Color>(Colors.black),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                ),
-              ),
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(Colors.lightBlue))));
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color(0xFF009688),
+          foregroundColor: Colors.white,
+          textStyle: TextStyle(color: white),
+        ),
+      ));
 }
