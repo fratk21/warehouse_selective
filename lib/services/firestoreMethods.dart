@@ -151,7 +151,88 @@ class firestoreservices {
     }
   }
 
+  Future<String?> productupdate_modules(
+      String modulessid,
+      String modulesname,
+      String productUid,
+      List prescriptions,
+      Uint8List? file,
+      String modulesdes) async {
+    try {
+      if (file == null) {
+        modulesModel.modules module = modulesModel.modules(
+            modulesid: modulessid,
+            modulesname: modulesname,
+            modulesdes: modulesdes,
+            modulesimage: "",
+            prescription: prescriptions,
+            price: "",
+            priceType: "");
+        await _firestore
+            .collection("products")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection("product")
+            .doc(productUid)
+            .collection("modules")
+            .doc(modulessid)
+            .update(module.toJson());
+      } else {
+        String photoUrl =
+            await StorageMethods().uploadImageToStorage('product', file, false);
+        modulesModel.modules module = modulesModel.modules(
+            modulesid: modulessid,
+            modulesname: modulesname,
+            modulesimage: photoUrl,
+            modulesdes: modulesdes,
+            prescription: prescriptions,
+            price: "",
+            priceType: "");
+        await _firestore
+            .collection("products")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection("product")
+            .doc(productUid)
+            .collection("modules")
+            .doc(modulessid)
+            .update(module.toJson());
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<String?> productAdd_prescriptions(
+      String prescriptionsid,
+      String prescriptionsname,
+      String productUid,
+      List material,
+      String prescriptionsdes,
+      String moduleid) async {
+    try {
+      prescriptionsModel.prescriptions prescriptions =
+          prescriptionsModel.prescriptions(
+              prescriptionsid: prescriptionsid,
+              prescriptionsname: prescriptionsname,
+              productid: productUid,
+              material: material,
+              prescriptionsdes: prescriptionsdes,
+              moduleid: moduleid);
+      await _firestore
+          .collection("products")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("product")
+          .doc(productUid)
+          .collection("modules")
+          .doc(moduleid)
+          .collection("prescriptions")
+          .doc(prescriptionsid)
+          .set(prescriptions.toJson());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String?> productupdate_prescriptions(
       String prescriptionsid,
       String prescriptionsname,
       String productUid,
@@ -193,6 +274,7 @@ class firestoreservices {
     List price,
     List priceType,
     List suppliers,
+    double total,
   ) async {
     try {
       materialModel.material materials = materialModel.material(
@@ -205,7 +287,64 @@ class firestoreservices {
           unit: unit,
           price: price,
           priceType: priceType,
-          suppliers: suppliers);
+          suppliers: suppliers,
+          total: total);
+      await _firestore
+          .collection("products")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("product")
+          .doc(productid)
+          .collection("modules")
+          .doc(modulsid)
+          .collection("prescriptions")
+          .doc(prescriptionsid)
+          .update({
+        "material": FieldValue.arrayUnion([materials.toJson()])
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String?> prescriptionsupdate_material(
+    String materialid,
+    String productid,
+    String prescriptionsid,
+    String modulsid,
+    String materialname,
+    String west,
+    String unit,
+    List price,
+    List priceType,
+    List suppliers,
+    double total,
+    int index,
+  ) async {
+    try {
+      await _firestore
+          .collection("products")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("product")
+          .doc(productid)
+          .collection("modules")
+          .doc(modulsid)
+          .collection("prescriptions")
+          .doc(prescriptionsid)
+          .update({
+        "material": FieldValue.arrayRemove([index])
+      });
+      materialModel.material materials = materialModel.material(
+          materialid: materialid,
+          productid: productid,
+          prescriptionsid: prescriptionsid,
+          modulesid: modulsid,
+          materialname: materialname,
+          west: west,
+          unit: unit,
+          price: price,
+          priceType: priceType,
+          suppliers: suppliers,
+          total: total);
       await _firestore
           .collection("products")
           .doc(FirebaseAuth.instance.currentUser!.uid)

@@ -1,6 +1,7 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:warehouse_selective/services/finance.dart';
 
 import '../../constants/constants.dart';
 import '../../services/firestoreMethods.dart';
@@ -8,7 +9,8 @@ import '../../utils/utils.dart';
 
 class add_material_per_screen extends StatefulWidget {
   final snap;
-  const add_material_per_screen({super.key, this.snap});
+  final int index;
+  const add_material_per_screen({super.key, this.snap, required this.index});
 
   @override
   State<add_material_per_screen> createState() =>
@@ -16,6 +18,7 @@ class add_material_per_screen extends StatefulWidget {
 }
 
 class _add_material_per_screenState extends State<add_material_per_screen> {
+  int control = 0;
   String selectedValue = "Kg";
   String selectedValueprice1 = "TL";
   String selectedValueprice2 = "TL";
@@ -27,17 +30,43 @@ class _add_material_per_screenState extends State<add_material_per_screen> {
   TextEditingController tedarik1price = TextEditingController();
   TextEditingController tedarik2price = TextEditingController();
   TextEditingController tedarik3price = TextEditingController();
-  TextEditingController tedarik1ype = TextEditingController();
-  TextEditingController tedarik2type = TextEditingController();
-  TextEditingController tedarik3type = TextEditingController();
   TextEditingController waste = TextEditingController();
+  void controle() {
+    if (widget.index == 9274824373436) {
+      control = 0;
+    } else {
+      control = 1;
+      materialname.text = widget.snap["materialname"].toString();
+      tedarik1.text = widget.snap["suppliers"][0].toString();
+      tedarik2.text = widget.snap["suppliers"][1].toString();
+      tedarik3.text = widget.snap["suppliers"][2].toString();
+      tedarik1price.text = widget.snap["price"][0].toString();
+      tedarik2price.text = widget.snap["price"][1].toString();
+      tedarik3price.text = widget.snap["price"][2].toString();
+      selectedValueprice1 = widget.snap["priceType"][0].toString();
+      selectedValueprice2 = widget.snap["priceType"][1].toString();
+      selectedValueprice3 = widget.snap["priceType"][2].toString();
+      waste.text = widget.snap["west"].toString();
+      selectedValue = widget.snap["unit"].toString();
+    }
+    setState(() {
+      control;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controle();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(widget.snap["prescriptionsname"]),
+        title: Text("Malzeme Ekle"),
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       ),
       body: Padding(
@@ -669,24 +698,56 @@ class _add_material_per_screenState extends State<add_material_per_screen> {
                                     tedarik2.text,
                                     tedarik3.text
                                   ];
-
-                                  await firestoreservices()
-                                      .prescriptionsAdd_material(
-                                          materialid,
-                                          widget.snap["productid"],
-                                          widget.snap["prescriptionsid"],
-                                          widget.snap["moduleid"],
-                                          materialname.text,
-                                          waste.text,
-                                          selectedValue,
-                                          price,
-                                          pricetype,
-                                          sup);
+                                  double total = 0;
+                                  if (selectedValueprice1 == "TL") {
+                                    total = double.parse(tedarik1price.text) *
+                                        double.parse(waste.text);
+                                  }
+                                  if (selectedValueprice1 == "DOLAR") {
+                                    total = (double.parse(tedarik1price.text) *
+                                            globaldolar) *
+                                        double.parse(waste.text);
+                                  }
+                                  if (selectedValueprice1 == "EURO") {
+                                    total = (double.parse(tedarik1price.text) *
+                                            globaleuro) *
+                                        double.parse(waste.text);
+                                  }
+                                  widget.index == 9274824373436
+                                      ? await firestoreservices()
+                                          .prescriptionsAdd_material(
+                                              materialid,
+                                              widget.snap["productid"],
+                                              widget.snap["prescriptionsid"],
+                                              widget.snap["modulesid"],
+                                              materialname.text,
+                                              waste.text,
+                                              selectedValue,
+                                              price,
+                                              pricetype,
+                                              sup,
+                                              total)
+                                      : await firestoreservices()
+                                          .prescriptionsupdate_material(
+                                              materialid,
+                                              widget.snap["productid"],
+                                              widget.snap["prescriptionsid"],
+                                              widget.snap["modulesid"],
+                                              materialname.text,
+                                              waste.text,
+                                              selectedValue,
+                                              price,
+                                              pricetype,
+                                              sup,
+                                              total,
+                                              widget.index);
                                 }
                                 Navigator.pop(context);
                               },
                               child: Text(
-                                "Malzemeyi Reçeteye Ekle",
+                                control == 0
+                                    ? "Malzemeyi Reçeteye Ekle"
+                                    : "Malzeme Güncelle",
                               )),
                         ),
                       )

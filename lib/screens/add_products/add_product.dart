@@ -33,11 +33,13 @@ class _add_product_screenState extends State<add_product_screen> {
   //image
   Uint8List? _image;
   Uint8List? _image1;
+  String netimage = "";
   //image
   //variables
   String productuid = "";
   bool isvisibil = false;
   bool isloading = false;
+  int controle = 0;
   //variables
 
   void control() {
@@ -46,12 +48,15 @@ class _add_product_screenState extends State<add_product_screen> {
     });
     if (widget.productid == "") {
       productuid = const Uuid().v1();
+      controle = 0;
     } else {
       productuid = widget.productid;
+      controle = 1;
       getdata();
     }
     setState(() {
       isloading = false;
+      controle;
     });
 
     print(productuid);
@@ -66,7 +71,11 @@ class _add_product_screenState extends State<add_product_screen> {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection("product")
         .doc(productuid)
-        .snapshots();
+        .get();
+    productname.text = productSnap.data()!["productname"].toString();
+    productdes.text = productSnap.data()!["productdes"].toString();
+    netimage = productSnap.data()!["productimage"].toString();
+
     setState(() {
       isloading = false;
     });
@@ -409,15 +418,25 @@ class _add_product_screenState extends State<add_product_screen> {
                         height: 200,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(20)),
-                            image: _image != null
+                            image: controle == 1
                                 ? DecorationImage(
-                                    image: MemoryImage(_image!),
+                                    // ignore: prefer_const_constructors
+                                    image: netimage != ""
+                                        ? NetworkImage(netimage)
+                                        : NetworkImage(
+                                            "https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg"),
                                     fit: BoxFit.fitWidth,
                                   )
-                                : const DecorationImage(
-                                    image: AssetImage("assets/add_product.jpg"),
-                                    fit: BoxFit.fitWidth,
-                                  )),
+                                : _image != null
+                                    ? DecorationImage(
+                                        image: MemoryImage(_image!),
+                                        fit: BoxFit.fitWidth,
+                                      )
+                                    : const DecorationImage(
+                                        image: AssetImage(
+                                            "assets/add_product.jpg"),
+                                        fit: BoxFit.fitWidth,
+                                      )),
                       ),
                       Positioned(
                         top: 50,
@@ -528,8 +547,43 @@ class _add_product_screenState extends State<add_product_screen> {
                   ),
                 ),
                 Container(
-                  child: !isvisibil
-                      ? Padding(
+                  child: controle == 0
+                      ? !isvisibil
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: 40,
+                                width: width(context),
+                                child: ElevatedButton(
+                                  style: Theme.of(context)
+                                      .elevatedButtonTheme
+                                      .style,
+                                  onPressed: () async {
+                                    if (productname.text.isEmpty) {
+                                      showsnackbar(
+                                          context,
+                                          "Lütfen Ürün Adını Giriniz",
+                                          AnimatedSnackBarType.error);
+                                    } else {
+                                      await firestoreservices().productCreate(
+                                          productuid,
+                                          _image,
+                                          productname.text,
+                                          productdes.text);
+                                      showsnackbar(context, "Ürün oluşturuldu",
+                                          AnimatedSnackBarType.success);
+
+                                      setState(() {
+                                        isvisibil = true;
+                                      });
+                                    }
+                                  },
+                                  child: const Text("Ürün Oluştur"),
+                                ),
+                              ),
+                            )
+                          : Container()
+                      : Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
                             height: 40,
@@ -544,12 +598,12 @@ class _add_product_screenState extends State<add_product_screen> {
                                       "Lütfen Ürün Adını Giriniz",
                                       AnimatedSnackBarType.error);
                                 } else {
-                                  await firestoreservices().productCreate(
+                                  await firestoreservices().productupdate(
                                       productuid,
                                       _image,
                                       productname.text,
                                       productdes.text);
-                                  showsnackbar(context, "Ürün oluşturuldu",
+                                  showsnackbar(context, "Ürün Güncelleştirildi",
                                       AnimatedSnackBarType.success);
 
                                   setState(() {
@@ -557,11 +611,10 @@ class _add_product_screenState extends State<add_product_screen> {
                                   });
                                 }
                               },
-                              child: const Text("Ürün Oluştur"),
+                              child: const Text("Ürün Güncelleştir"),
                             ),
                           ),
-                        )
-                      : Container(),
+                        ),
                 ),
                 SizedBox(
                   height: 10,
@@ -571,21 +624,18 @@ class _add_product_screenState extends State<add_product_screen> {
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                     elevation: 10,
-                    child: isvisibil
-                        ? Container(
-                            height: 40,
-                            width: width(context),
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                            ),
-                            child: Center(
-                                child: Text(
-                              "Modüller",
-                              style: TextStyle(fontSize: 20),
-                            )),
-                          )
-                        : Container()),
+                    child: Container(
+                      height: 40,
+                      width: width(context),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      child: Center(
+                          child: Text(
+                        "Modüller",
+                        style: TextStyle(fontSize: 20),
+                      )),
+                    )),
                 StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('products')

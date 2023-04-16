@@ -52,10 +52,12 @@ class _navigator_screenState extends State<navigator_screen> {
       ), //destination screen
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.view_list,
-        backgroundColor: lblue,
+        backgroundColor: Theme.of(context).cardColor,
         children: [
           SpeedDialChild(
-            child: Image.asset("assets/icons/product.png", color: lblue),
+            child: Image.asset(
+              "assets/icons/product.png",
+            ),
             label: "Ürün Ekle",
             onTap: () {
               Navigator.push(
@@ -84,6 +86,7 @@ class _navigator_screenState extends State<navigator_screen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
+        backgroundColor: Theme.of(context).cardColor,
         icons: const [
           Icons.poll_rounded,
           Icons.warehouse_rounded,
@@ -102,11 +105,11 @@ class _navigator_screenState extends State<navigator_screen> {
             pageController.jumpToPage(_bottomNavIndex);
           });
         },
-        activeColor: lblue,
+        activeColor: Theme.of(context).hintColor,
         blurEffect: true,
         splashColor: platinyum,
         splashRadius: 30,
-        inactiveColor: mediumgray,
+        inactiveColor: Theme.of(context).shadowColor,
       ),
     );
   }

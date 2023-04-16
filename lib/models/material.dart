@@ -11,6 +11,7 @@ class material {
   List? price;
   List? priceType;
   List? suppliers;
+  double total;
 
   material({
     required this.materialid,
@@ -23,23 +24,24 @@ class material {
     required this.price,
     required this.priceType,
     required this.suppliers,
+    required this.total,
   });
 
   static material fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return material(
-      materialid: snapshot["materialid"],
-      materialname: snapshot["materialname"],
-      west: snapshot["west"],
-      unit: snapshot["unit"],
-      price: snapshot["price"],
-      priceType: snapshot["priceType"],
-      productid: snapshot["productid"],
-      prescriptionsid: snapshot["prescriptionsid"],
-      modulesid: snapshot["modulesid"],
-      suppliers: snapshot["suppliers"],
-    );
+        materialid: snapshot["materialid"],
+        materialname: snapshot["materialname"],
+        west: snapshot["west"],
+        unit: snapshot["unit"],
+        price: snapshot["price"],
+        priceType: snapshot["priceType"],
+        productid: snapshot["productid"],
+        prescriptionsid: snapshot["prescriptionsid"],
+        modulesid: snapshot["modulesid"],
+        suppliers: snapshot["suppliers"],
+        total: snapshot["total"]);
   }
 
   Map<String, dynamic> toJson() => {
@@ -53,5 +55,6 @@ class material {
         "productid": productid,
         "modulesid": modulesid,
         "suppliers": suppliers,
+        "total": total
       };
 }

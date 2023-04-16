@@ -9,6 +9,7 @@ import 'package:warehouse_selective/screens/add_products/add_material.dart';
 import 'package:warehouse_selective/screens/add_products/add_material_screen.dart';
 import 'package:warehouse_selective/utils/utils.dart';
 
+import '../services/finance.dart';
 import '../services/firestoreMethods.dart';
 import '../services/material_finance.dart';
 import '../widgets/combo.dart';
@@ -428,7 +429,21 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                                         tedarik2.text,
                                         tedarik3.text
                                       ];
-
+                                      double total = 0;
+                                      if (selectedValueprice1 == "TL") {
+                                        total =
+                                            double.parse(tedarik1price.text);
+                                      }
+                                      if (selectedValueprice1 == "DOLAR") {
+                                        total =
+                                            double.parse(tedarik1price.text) *
+                                                globaldolar;
+                                      }
+                                      if (selectedValueprice1 == "EURO") {
+                                        total =
+                                            double.parse(tedarik1price.text) *
+                                                globaleuro;
+                                      }
                                       await firestoreservices()
                                           .prescriptionsAdd_material(
                                               materialid,
@@ -440,7 +455,8 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                                               selectedValue,
                                               price,
                                               pricetype,
-                                              sup);
+                                              sup,
+                                              total);
                                     }
                                     Navigator.pop(context);
                                   },
@@ -501,6 +517,161 @@ class _prescription_add_cardState extends State<prescription_add_card> {
     );
   }
 
+  TextEditingController prescriptionsname = TextEditingController();
+  TextEditingController prescriptiondes = TextEditingController();
+
+  Future RecetePopup(snap) {
+    prescriptionsname.text = snap["prescriptionsname"];
+    prescriptiondes.text = snap["prescriptionsdes"];
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Theme.of(context).cardColor,
+            elevation: 10,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            contentPadding: EdgeInsets.zero,
+            content: Stack(
+              children: <Widget>[
+                Form(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          elevation: 10,
+                          child: Container(
+                            height: 60,
+                            width: width(context),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(
+                                  Icons.discount_rounded,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                    child: TextField(
+                                  keyboardType: TextInputType.name,
+                                  obscureText: false,
+                                  maxLines: 2,
+                                  controller: prescriptionsname,
+                                  cursorColor:
+                                      Theme.of(context).primaryColorDark,
+                                  decoration: InputDecoration(
+                                    labelText: "Reçete Adı",
+                                    border: InputBorder.none,
+                                  ),
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                )),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          elevation: 10,
+                          child: Container(
+                            height: 100,
+                            width: width(context),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(
+                                  Icons.dashboard_customize_rounded,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                    child: TextField(
+                                  keyboardType: TextInputType.name,
+                                  obscureText: false,
+                                  maxLines: 3,
+                                  controller: prescriptiondes,
+                                  cursorColor:
+                                      Theme.of(context).primaryColorDark,
+                                  decoration: InputDecoration(
+                                    labelText: "Reçete Açıklaması",
+                                    border: InputBorder.none,
+                                  ),
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                )),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20.0, right: 20, top: 10, bottom: 10),
+                        child: Container(
+                          width: width(context),
+                          child: ElevatedButton(
+
+                              // ignore: prefer_const_constructors
+                              style:
+                                  Theme.of(context).elevatedButtonTheme.style,
+                              onPressed: () async {
+                                if (prescriptionsname.text.isEmpty) {
+                                  showsnackbar(
+                                      context,
+                                      "Lütfen Reçete Adı giriniz",
+                                      AnimatedSnackBarType.error);
+                                } else {
+                                  await firestoreservices()
+                                      .productupdate_prescriptions(
+                                          snap["prescriptionsid"],
+                                          prescriptionsname.text,
+                                          snap["productid"],
+                                          [],
+                                          prescriptiondes.text,
+                                          snap["moduleid"]);
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: Text("Reçete Güncelleştir")),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   Future secenek(snap) {
     return showModalBottomSheet(
       context: context,
@@ -524,6 +695,7 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                           MaterialPageRoute(
                             builder: (context) => add_material_per_screen(
                               snap: snap,
+                              index: 9274824373436,
                             ),
                           ));
                     },
@@ -538,10 +710,11 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                 title: TextButton(
                     onPressed: () async {
                       Navigator.pop(context);
+                      RecetePopup(snap);
                     },
                     child: Center(
                       child: Text(
-                        "Düzenle",
+                        "Reçete Düzenle",
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ))),

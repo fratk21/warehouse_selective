@@ -66,8 +66,10 @@ class _add_material_screenState extends State<add_material_screen> {
                       result = Container();
                     } else {
                       result = materialadd_card(
-                          snap: (snapshot.data! as dynamic).docs[0]["material"]
-                              [index]);
+                        snap: (snapshot.data! as dynamic).docs[0]["material"]
+                            [index],
+                        index: index,
+                      );
                     }
 
                     return result;
@@ -92,6 +94,7 @@ class _add_material_screenState extends State<add_material_screen> {
                   MaterialPageRoute(
                     builder: (context) => add_material_per_screen(
                       snap: widget.snap,
+                      index: 9274824373436,
                     ),
                   ));
             },
