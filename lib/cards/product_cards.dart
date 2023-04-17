@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:warehouse_selective/constants/thema_provider.dart';
 import 'package:warehouse_selective/screens/add_products/add_product.dart';
+import 'package:warehouse_selective/services/firestoreMethods.dart';
 
 import '../constants/constants.dart';
 import '../screens/add_products/add_material_screen.dart';
@@ -108,6 +109,19 @@ class _product_cardState extends State<product_card> {
             ListTile(
                 tileColor: Theme.of(context).cardColor,
                 title: TextButton(
+                    style: Theme.of(context).textButtonTheme.style,
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
+                    child: Center(
+                      child: Text(
+                        "Rapor Al",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ))),
+            ListTile(
+                tileColor: Theme.of(context).cardColor,
+                title: TextButton(
                     onPressed: () async {
                       Navigator.pop(context);
                       Navigator.push(
@@ -127,11 +141,12 @@ class _product_cardState extends State<product_card> {
                 tileColor: Theme.of(context).cardColor,
                 title: TextButton(
                     onPressed: () async {
+                      firestoreservices().productdelete(snap["productid"]);
                       Navigator.pop(context);
                     },
                     child: Center(
                       child: Text(
-                        "Rapor Al",
+                        "Ürünü Sil",
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ))),

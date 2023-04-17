@@ -59,6 +59,83 @@ class firestoreservices {
     }
   }
 
+  Future<String?> productdelete(String productUid) async {
+    try {
+      await _firestore
+          .collection('products')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("product")
+          .doc(productUid)
+          .delete();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String?> presdelete(
+      String productUid, String modulessid, String prescriptionsid) async {
+    try {
+      await _firestore
+          .collection('products')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("product")
+          .doc(productUid)
+          .collection("modules")
+          .doc(modulessid)
+          .collection("prescriptions")
+          .doc(prescriptionsid)
+          .delete();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String?> materialdelete(snap) async {
+    try {
+      materialModel.material materials1 = materialModel.material(
+          materialid: snap["materialid"].toString(),
+          productid: snap["productid"].toString(),
+          prescriptionsid: snap["prescriptionsid"].toString(),
+          modulesid: snap["modulesid"].toString(),
+          materialname: snap["materialname"].toString(),
+          west: snap["west"].toString(),
+          unit: snap["unit"].toString(),
+          price: snap["price"],
+          priceType: snap["priceType"],
+          suppliers: snap["suppliers"],
+          total: double.parse(snap["total"].toString()));
+      await _firestore
+          .collection("products")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("product")
+          .doc(snap["productid"])
+          .collection("modules")
+          .doc(snap["modulesid"])
+          .collection("prescriptions")
+          .doc(snap["prescriptionsid"])
+          .update({
+        "material": FieldValue.arrayRemove([materials1.toJson()])
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String?> moduledelete(String productUid, String modulessid) async {
+    try {
+      await _firestore
+          .collection('products')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("product")
+          .doc(productUid)
+          .collection("modules")
+          .doc(modulessid)
+          .delete();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<String?> productupdate(String productUid, Uint8List? file,
       String productname, String productdes) async {
     try {
@@ -307,6 +384,7 @@ class firestoreservices {
   }
 
   Future<String?> prescriptionsupdate_material(
+    snap,
     String materialid,
     String productid,
     String prescriptionsid,
@@ -317,48 +395,56 @@ class firestoreservices {
     List price,
     List priceType,
     List suppliers,
-    double total,
+    double totals,
     int index,
   ) async {
-    try {
-      await _firestore
-          .collection("products")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("product")
-          .doc(productid)
-          .collection("modules")
-          .doc(modulsid)
-          .collection("prescriptions")
-          .doc(prescriptionsid)
-          .update({
-        "material": FieldValue.arrayRemove([index])
-      });
-      materialModel.material materials = materialModel.material(
-          materialid: materialid,
-          productid: productid,
-          prescriptionsid: prescriptionsid,
-          modulesid: modulsid,
-          materialname: materialname,
-          west: west,
-          unit: unit,
-          price: price,
-          priceType: priceType,
-          suppliers: suppliers,
-          total: total);
-      await _firestore
-          .collection("products")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("product")
-          .doc(productid)
-          .collection("modules")
-          .doc(modulsid)
-          .collection("prescriptions")
-          .doc(prescriptionsid)
-          .update({
-        "material": FieldValue.arrayUnion([materials.toJson()])
-      });
-    } catch (e) {
-      print(e);
-    }
+    materialModel.material materials1 = materialModel.material(
+        materialid: snap["materialid"].toString(),
+        productid: snap["productid"].toString(),
+        prescriptionsid: snap["prescriptionsid"].toString(),
+        modulesid: snap["modulesid"].toString(),
+        materialname: snap["materialname"].toString(),
+        west: snap["west"].toString(),
+        unit: snap["unit"].toString(),
+        price: snap["price"],
+        priceType: snap["priceType"],
+        suppliers: snap["suppliers"],
+        total: double.parse(snap["total"].toString()));
+    await _firestore
+        .collection("products")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("product")
+        .doc(productid)
+        .collection("modules")
+        .doc(modulsid)
+        .collection("prescriptions")
+        .doc(prescriptionsid)
+        .update({
+      "material": FieldValue.arrayRemove([materials1.toJson()])
+    });
+    materialModel.material materials = materialModel.material(
+        materialid: materialid,
+        productid: productid,
+        prescriptionsid: prescriptionsid,
+        modulesid: modulsid,
+        materialname: materialname,
+        west: west,
+        unit: unit,
+        price: price,
+        priceType: priceType,
+        suppliers: suppliers,
+        total: totals);
+    await _firestore
+        .collection("products")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("product")
+        .doc(productid)
+        .collection("modules")
+        .doc(modulsid)
+        .collection("prescriptions")
+        .doc(prescriptionsid)
+        .update({
+      "material": FieldValue.arrayUnion([materials.toJson()])
+    });
   }
 }

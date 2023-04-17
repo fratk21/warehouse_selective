@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:warehouse_selective/constants/constants.dart';
 import 'package:warehouse_selective/services/finance.dart';
+import 'package:warehouse_selective/services/firestoreMethods.dart';
 
 import '../screens/add_products/add_material_screen.dart';
 
@@ -44,6 +45,19 @@ class _materialadd_cardState extends State<materialadd_card> {
                     child: Center(
                       child: Text(
                         "Malzeme Düzenle",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ))),
+            ListTile(
+                tileColor: Theme.of(context).cardColor,
+                title: TextButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      firestoreservices().materialdelete(snap);
+                    },
+                    child: Center(
+                      child: Text(
+                        "Malzeme Sil",
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ))),

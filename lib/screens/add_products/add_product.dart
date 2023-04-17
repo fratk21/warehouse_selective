@@ -683,8 +683,20 @@ class _add_product_screenState extends State<add_product_screen> {
           ),
         ),
       ),
-      floatingActionButton: !isvisibil
-          ? Container()
+      floatingActionButton: controle == 0
+          ? !isvisibil
+              ? Container()
+              : Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  width: 150,
+                  height: 40,
+                  child: ElevatedButton(
+                      style: Theme.of(context).elevatedButtonTheme.style,
+                      onPressed: () => Modulpopop(),
+                      child: Text("Modül oluştur")),
+                )
           : Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),

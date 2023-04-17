@@ -719,7 +719,7 @@ class _add_material_per_screenState extends State<add_material_per_screen> {
                                               materialid,
                                               widget.snap["productid"],
                                               widget.snap["prescriptionsid"],
-                                              widget.snap["modulesid"],
+                                              widget.snap["moduleid"],
                                               materialname.text,
                                               waste.text,
                                               selectedValue,
@@ -729,10 +729,11 @@ class _add_material_per_screenState extends State<add_material_per_screen> {
                                               total)
                                       : await firestoreservices()
                                           .prescriptionsupdate_material(
+                                              widget.snap,
                                               materialid,
                                               widget.snap["productid"],
                                               widget.snap["prescriptionsid"],
-                                              widget.snap["modulesid"],
+                                              widget.snap["moduleid"],
                                               materialname.text,
                                               waste.text,
                                               selectedValue,

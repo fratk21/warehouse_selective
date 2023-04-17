@@ -718,6 +718,20 @@ class _prescription_add_cardState extends State<prescription_add_card> {
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ))),
+            ListTile(
+                tileColor: Theme.of(context).cardColor,
+                title: TextButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      firestoreservices().presdelete(snap["productid"],
+                          snap["moduleid"], snap["prescriptionsid"]);
+                    },
+                    child: Center(
+                      child: Text(
+                        "Reçete Sil",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ))),
           ],
         );
       },

@@ -378,6 +378,23 @@ Widget modules_card_product_add_screen(
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ))),
+            ListTile(
+                title: TextButton.icon(
+                    icon: Icon(
+                      Icons.delete_forever,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      firestoreservices()
+                          .moduledelete(productid, snap["modulesid"]);
+                    },
+                    label: Center(
+                      child: Text(
+                        "Modülü Sil",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ))),
           ],
         );
       },
