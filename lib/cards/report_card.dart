@@ -78,6 +78,9 @@ class _report_cardState extends State<report_card> {
                                               fit: BoxFit.fitWidth,
                                             )),
                                 ),
+                                SizedBox(
+                                  height: 5,
+                                ),
                                 Card(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
@@ -113,9 +116,7 @@ class _report_cardState extends State<report_card> {
                                     height: 30,
                                     width: MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .appBarTheme
-                                            .backgroundColor,
+                                        color: Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(15),
                                             topRight: Radius.circular(15))),

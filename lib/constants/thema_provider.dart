@@ -22,7 +22,7 @@ class ThemeProvider extends ChangeNotifier {
 
 class MyThemes {
   static final darkTheme = ThemeData(
-      appBarTheme: AppBarTheme(backgroundColor: Color(0xFF212121)),
+      appBarTheme: AppBarTheme(backgroundColor: Color(0xFF424242)),
       cardColor: Color(0xFF424242),
       scaffoldBackgroundColor: Color(0xFF212121),
       primaryColor: Color(0xFF212121),

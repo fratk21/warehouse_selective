@@ -1,7 +1,9 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:warehouse_selective/constants/constants.dart';
 import 'package:warehouse_selective/navigator.dart';
 import 'package:warehouse_selective/screens/forgot_password/forgot_pass.dart';
+import 'package:warehouse_selective/utils/utils.dart';
 
 import '../../components/background.dart';
 import '../../services/auth_service.dart';
@@ -117,7 +119,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           MaterialPageRoute(
                             builder: (context) => const navigator_screen(),
                           ));
-                    } else {}
+                    } else {
+                      showsnackbar(
+                          context, res.toString(), AnimatedSnackBarType.error);
+                    }
                   }
                 },
                 style: ButtonStyle(

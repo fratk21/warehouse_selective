@@ -1,7 +1,9 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:warehouse_selective/navigator.dart';
 import 'package:warehouse_selective/services/auth_service.dart';
+import 'package:warehouse_selective/utils/utils.dart';
 
 import '../../components/background.dart';
 import '../../constants/constants.dart';
@@ -133,15 +135,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
               margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: ElevatedButton(
                 onPressed: () async {
-                  if (username.text.isEmpty || password.text.isEmpty) {
+                  if (username.text.isEmpty ||
+                      password.text.isEmpty ||
+                      email.text.isEmpty) {
                   } else {
-                    String? res = await _servis.register(
-                        username.text, email.text, password.text, phone.text);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => navigator_screen(),
-                        ));
+                    if (password.text.length < 6) {
+                      showsnackbar(context, "Şifre 6 karakterden küçük olamaz",
+                          AnimatedSnackBarType.error);
+                    } else {
+                      String? res = await _servis.register(
+                          username.text, email.text, password.text, phone.text);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => navigator_screen(),
+                          ));
+                    }
                   }
                 },
                 style: ButtonStyle(

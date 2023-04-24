@@ -201,10 +201,10 @@ class _add_prescription_screenState extends State<add_prescription_screen> {
                 Container(
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).appBarTheme.backgroundColor,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(0),
-                        bottomLeft: Radius.circular(100.0),
+                        bottomLeft: Radius.circular(100),
                         bottomRight: Radius.circular(100),
                         topRight: Radius.circular(0)),
                   ),
