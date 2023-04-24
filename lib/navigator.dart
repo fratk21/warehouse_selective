@@ -41,6 +41,7 @@ class _navigator_screenState extends State<navigator_screen> {
     return Scaffold(
       body: PageView(
         padEnds: true,
+        physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         onPageChanged: onPageChanged,
         children: [
@@ -50,39 +51,20 @@ class _navigator_screenState extends State<navigator_screen> {
           settings_screen(),
         ],
       ), //destination screen
-      floatingActionButton: SpeedDial(
-        animatedIcon: AnimatedIcons.view_list,
+      floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).cardColor,
-        children: [
-          SpeedDialChild(
-            child: Image.asset(
-              "assets/icons/product.png",
-            ),
-            label: "Ürün Ekle",
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        const add_product_screen(productid: ""),
-                  ));
-            },
-          ),
-          SpeedDialChild(
-            child: Image.asset("assets/icons/raw.png", color: lblue),
-            label: "Malzeme Ekle",
-            onTap: () {
-              print("object");
-            },
-          ),
-          SpeedDialChild(
-            child: Image.asset("assets/icons/package.png", color: lblue),
-            label: "Paket Oluştur",
-            onTap: () {
-              print("object");
-            },
-          ),
-        ],
+        child: Icon(
+          Icons.add,
+          size: 40,
+          color: Theme.of(context).iconTheme.color,
+        ),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const add_product_screen(productid: ""),
+              ));
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(

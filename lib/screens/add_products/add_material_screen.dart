@@ -1,4 +1,6 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:warehouse_selective/services/finance.dart';
@@ -19,6 +21,7 @@ class add_material_per_screen extends StatefulWidget {
 
 class _add_material_per_screenState extends State<add_material_per_screen> {
   int control = 0;
+  bool showmaterial = false;
   String selectedValue = "Kg";
   String selectedValueprice1 = "TL";
   String selectedValueprice2 = "TL";
@@ -73,8 +76,6 @@ class _add_material_per_screenState extends State<add_material_per_screen> {
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
           child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
             child: Stack(
               children: <Widget>[
                 Form(
@@ -123,12 +124,146 @@ class _add_material_per_screenState extends State<add_material_per_screen> {
                                     border: InputBorder.none,
                                   ),
                                   style: Theme.of(context).textTheme.bodyLarge,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      if (materialname.text.isEmpty) {
+                                        showmaterial = false;
+                                      } else {
+                                        showmaterial = true;
+                                      }
+                                    });
+                                  },
                                 )),
                               ],
                             ),
                           ),
                         ),
                       ),
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: !showmaterial
+                              ? Container()
+                              : Container(
+                                  height: 100,
+                                  child: FutureBuilder(
+                                    future: FirebaseFirestore.instance
+                                        .collection("products")
+                                        .doc(FirebaseAuth
+                                            .instance.currentUser!.uid)
+                                        .collection("material")
+                                        .where("materialname",
+                                            isGreaterThanOrEqualTo:
+                                                materialname.text)
+                                        .get(),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                      return ListView.builder(
+                                        itemCount: (snapshot.data! as dynamic)
+                                            .docs
+                                            .length,
+                                        itemBuilder: (context, index) {
+                                          Widget result;
+                                          if ((snapshot.data! as dynamic)
+                                                  .docs
+                                                  .length ==
+                                              0) {
+                                            result = Center(
+                                              child: Text("Malzeme Bulunamadı"),
+                                            );
+                                          } else {
+                                            result = InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  materialname.text = (snapshot
+                                                              .data! as dynamic)
+                                                          .docs[index]
+                                                      ['materialname'];
+                                                  waste.text = (snapshot.data!
+                                                          as dynamic)
+                                                      .docs[index]['west'];
+                                                  selectedValue = (snapshot
+                                                          .data! as dynamic)
+                                                      .docs[index]['unit'];
+                                                  tedarik1.text = (snapshot
+                                                              .data! as dynamic)
+                                                          .docs[index]
+                                                      ['suppliers'][0];
+                                                  tedarik1price.text = (snapshot
+                                                          .data! as dynamic)
+                                                      .docs[index]['price'][0];
+                                                  selectedValueprice1 =
+                                                      (snapshot.data!
+                                                                  as dynamic)
+                                                              .docs[index]
+                                                          ['priceType'][0];
+                                                  //
+                                                  tedarik2.text = (snapshot
+                                                              .data! as dynamic)
+                                                          .docs[index]
+                                                      ['suppliers'][1];
+                                                  tedarik2price.text = (snapshot
+                                                          .data! as dynamic)
+                                                      .docs[index]['price'][1];
+                                                  selectedValueprice2 =
+                                                      (snapshot.data!
+                                                                  as dynamic)
+                                                              .docs[index]
+                                                          ['priceType'][1];
+                                                  //
+                                                  tedarik3.text = (snapshot
+                                                              .data! as dynamic)
+                                                          .docs[index]
+                                                      ['suppliers'][2];
+                                                  tedarik3price.text = (snapshot
+                                                          .data! as dynamic)
+                                                      .docs[index]['price'][2];
+                                                  selectedValueprice3 =
+                                                      (snapshot.data!
+                                                                  as dynamic)
+                                                              .docs[index]
+                                                          ['priceType'][2];
+                                                  showmaterial = false;
+                                                });
+                                              },
+                                              child: Card(
+                                                color:
+                                                    Theme.of(context).cardColor,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                ),
+                                                elevation: 1,
+                                                child: Container(
+                                                    height: 40,
+                                                    width: width(context),
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(context)
+                                                          .cardColor,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  15)),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text((snapshot.data!
+                                                                  as dynamic)
+                                                              .docs[index]
+                                                          ['materialname']),
+                                                    )),
+                                              ),
+                                            );
+                                          }
+                                          return result;
+                                        },
+                                      );
+                                    },
+                                  ),
+                                )),
                       Row(
                         children: [
                           Padding(
@@ -699,6 +834,30 @@ class _add_material_per_screenState extends State<add_material_per_screen> {
                                     tedarik3.text
                                   ];
                                   double total = 0;
+                                  List tlprices = [];
+                                  for (var i = 0; i < 3; i++) {
+                                    if (pricetype[i] == "TL" &&
+                                        price[i] != "") {
+                                      tlprices.add(double.parse(price[i]) *
+                                          double.parse(waste.text));
+                                    } else if (pricetype[i] == "EURO" &&
+                                        price[i] != "") {
+                                      tlprices.add(double.parse(price[i]) *
+                                          globaleuro *
+                                          double.parse(waste.text));
+                                    } else if (pricetype[i] == "DOLAR" &&
+                                        price[i] != "") {
+                                      tlprices.add(double.parse(price[i]) *
+                                          globaldolar *
+                                          double.parse(waste.text));
+                                    }
+                                  }
+                                  double max, min;
+
+                                  max =
+                                      tlprices.reduce((a, b) => a > b ? a : b);
+                                  min =
+                                      tlprices.reduce((a, b) => a < b ? a : b);
                                   if (selectedValueprice1 == "TL") {
                                     total = double.parse(tedarik1price.text) *
                                         double.parse(waste.text);
@@ -726,7 +885,9 @@ class _add_material_per_screenState extends State<add_material_per_screen> {
                                               price,
                                               pricetype,
                                               sup,
-                                              total)
+                                              total,
+                                              max,
+                                              min)
                                       : await firestoreservices()
                                           .prescriptionsupdate_material(
                                               widget.snap,
@@ -741,7 +902,9 @@ class _add_material_per_screenState extends State<add_material_per_screen> {
                                               pricetype,
                                               sup,
                                               total,
-                                              widget.index);
+                                              widget.index,
+                                              max,
+                                              min);
                                 }
                                 Navigator.pop(context);
                               },

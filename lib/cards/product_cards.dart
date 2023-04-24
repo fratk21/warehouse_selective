@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:warehouse_selective/cards/report_card.dart';
 import 'package:warehouse_selective/constants/thema_provider.dart';
 import 'package:warehouse_selective/screens/add_products/add_product.dart';
 import 'package:warehouse_selective/services/firestoreMethods.dart';
@@ -56,8 +57,9 @@ class _product_cardState extends State<product_card> {
           .collection("prescriptions")
           .get();
       preslength += pres.docs.length;
-      for (var k = 0; k < pres.docs.length; k++) {
-        print("fora gşr");
+      print("fora gşr");
+      if (pres.docs.isEmpty) {
+      } else {
         var material = await FirebaseFirestore.instance
             .collection('products')
             .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -66,9 +68,9 @@ class _product_cardState extends State<product_card> {
             .collection("modules")
             .doc(modules.docs[i].id)
             .collection("prescriptions")
-            .doc(pres.docs[k].id)
+            .doc(pres.docs[pres.docs.length - 1].id)
             .get();
-        print(k.toString() + "K");
+
         print(modules.docs[i].id);
 
         print(material["material"].length.toString() + "material");
@@ -112,6 +114,13 @@ class _product_cardState extends State<product_card> {
                     style: Theme.of(context).textButtonTheme.style,
                     onPressed: () async {
                       Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => report_card(
+                              snap: widget.snap,
+                            ),
+                          ));
                     },
                     child: Center(
                       child: Text(

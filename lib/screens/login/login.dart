@@ -33,7 +33,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(
                 "LOGIN",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, color: orange, fontSize: 36),
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2196F3),
+                    fontSize: 36),
                 textAlign: TextAlign.left,
               ),
             ),
@@ -46,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: orange),
+                      borderSide: BorderSide(color: Color(0xFF2196F3)),
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: black),
@@ -55,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     labelStyle: TextStyle(color: Colors.black),
                     suffixIcon: Icon(
                       Icons.mail,
-                      color: orange,
+                      color: Color(0xFF2196F3),
                     )),
               ),
             ),
@@ -67,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: password,
                 decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: orange),
+                      borderSide: BorderSide(color: Color(0xFF2196F3)),
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: black),
@@ -76,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     labelStyle: TextStyle(color: Colors.black),
                     suffixIcon: Icon(
                       Icons.lock,
-                      color: orange,
+                      color: Color(0xFF2196F3),
                     )),
                 obscureText: true,
               ),
@@ -104,15 +106,19 @@ class _LoginScreenState extends State<LoginScreen> {
               margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: ElevatedButton(
                 onPressed: () async {
-                  String? res = await _servis.login(email.text, password.text);
-                  if (res == "ok") {
-                    // ignore: use_build_context_synchronously
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const navigator_screen(),
-                        ));
-                  } else {}
+                  if (email.text.isEmpty || password.text.isEmpty) {
+                  } else {
+                    String? res =
+                        await _servis.login(email.text, password.text);
+                    if (res == "ok") {
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const navigator_screen(),
+                          ));
+                    } else {}
+                  }
                 },
                 style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsets>(
@@ -128,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: new BoxDecoration(
                       borderRadius: BorderRadius.circular(80.0),
                       gradient: new LinearGradient(
-                          colors: [Color.fromARGB(255, 255, 136, 34), yellow])),
+                          colors: [Color(0xFF009688), Color(0xFF2196F3)])),
                   padding: const EdgeInsets.all(0),
                   child: Text(
                     "LOGIN",

@@ -34,6 +34,7 @@ class auth_services {
         await _firestore.collection("users").doc(cred.user!.uid).set({
           "username": username,
           "email": email,
+          "thema": false,
         });
         await _firestore.collection("products").doc(cred.user!.uid).set({
           "uid": cred.user!.uid,
@@ -44,6 +45,10 @@ class auth_services {
     } catch (e) {
       print(e);
     }
+  }
+
+  out() async {
+    return await _auth.signOut();
   }
 
   Future<String?> ResetPassword(String email) async {

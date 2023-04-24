@@ -38,7 +38,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: const Text(
                 "REGISTER",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, color: orange, fontSize: 36),
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2196F3),
+                    fontSize: 36),
                 textAlign: TextAlign.left,
               ),
             ),
@@ -50,7 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: username,
                 decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: orange),
+                      borderSide: BorderSide(color: Color(0xFF2196F3)),
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: black),
@@ -59,7 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     labelStyle: TextStyle(color: Colors.black),
                     suffixIcon: Icon(
                       Icons.person,
-                      color: orange,
+                      color: Color(0xFF2196F3),
                     )),
               ),
             ),
@@ -72,7 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: orange),
+                      borderSide: BorderSide(color: Color(0xFF2196F3)),
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: black),
@@ -81,7 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     labelStyle: TextStyle(color: Colors.black),
                     suffixIcon: Icon(
                       Icons.mail,
-                      color: orange,
+                      color: Color(0xFF2196F3),
                     )),
               ),
             ),
@@ -111,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: password,
                 decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: orange),
+                      borderSide: BorderSide(color: Color(0xFF2196F3)),
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: black),
@@ -120,7 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     labelStyle: TextStyle(color: Colors.black),
                     suffixIcon: Icon(
                       Icons.lock,
-                      color: orange,
+                      color: Color(0xFF2196F3),
                     )),
                 obscureText: true,
               ),
@@ -131,13 +133,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: ElevatedButton(
                 onPressed: () async {
-                  String? res = await _servis.register(
-                      username.text, email.text, password.text, phone.text);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => navigator_screen(),
-                      ));
+                  if (username.text.isEmpty || password.text.isEmpty) {
+                  } else {
+                    String? res = await _servis.register(
+                        username.text, email.text, password.text, phone.text);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => navigator_screen(),
+                        ));
+                  }
                 },
                 style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsets>(
@@ -152,7 +157,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   width: size.width * 0.5,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(80.0),
-                      gradient: const LinearGradient(colors: [orange, yellow])),
+                      gradient: const LinearGradient(
+                          colors: [Color(0xFF2196F3), Color(0xFF009688)])),
                   padding: const EdgeInsets.all(0),
                   child: const Text(
                     "SIGN UP",

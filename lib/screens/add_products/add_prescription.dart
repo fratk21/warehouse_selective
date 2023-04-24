@@ -193,68 +193,70 @@ class _add_prescription_screenState extends State<add_prescription_screen> {
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
-      body: Container(
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).appBarTheme.backgroundColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(0),
-                      bottomLeft: Radius.circular(100.0),
-                      bottomRight: Radius.circular(100),
-                      topRight: Radius.circular(0)),
+      body: SingleChildScrollView(
+        child: Container(
+          child: Center(
+            child: Column(
+              children: [
+                Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).appBarTheme.backgroundColor,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(0),
+                        bottomLeft: Radius.circular(100.0),
+                        bottomRight: Radius.circular(100),
+                        topRight: Radius.circular(0)),
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  child: Center(child: Text(widget.modulesname)),
                 ),
-                width: MediaQuery.of(context).size.width,
-                child: Center(child: Text(widget.modulesname)),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('products')
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .collection("product")
-                      .doc(widget.productid)
-                      .collection("modules")
-                      .doc(widget.modulesid)
-                      .collection("prescriptions")
-                      .snapshots(),
-                  builder: (context,
-                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                          snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return Container(
-                      height: snapshot.data!.docs.length * 250,
-                      child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: snapshot.data!.docs.length == 0
-                            ? 1
-                            : snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          Widget result;
-                          if (snapshot.data!.docs.isEmpty) {
-                            result = Container();
-                          } else {
-                            result = prescription_add_card(
-                              snap: snapshot.data!.docs[index].data(),
-                            );
-                          }
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('products')
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .collection("product")
+                        .doc(widget.productid)
+                        .collection("modules")
+                        .doc(widget.modulesid)
+                        .collection("prescriptions")
+                        .snapshots(),
+                    builder: (context,
+                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                            snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return Container(
+                        height: snapshot.data!.docs.length * 250,
+                        child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: snapshot.data!.docs.length == 0
+                              ? 1
+                              : snapshot.data!.docs.length,
+                          itemBuilder: (context, index) {
+                            Widget result;
+                            if (snapshot.data!.docs.isEmpty) {
+                              result = Container();
+                            } else {
+                              result = prescription_add_card(
+                                snap: snapshot.data!.docs[index].data(),
+                              );
+                            }
 
-                          return result;
-                        },
-                      ),
-                    );
-                  },
-                ),
-              )
-            ],
+                            return result;
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

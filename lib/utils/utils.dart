@@ -29,7 +29,10 @@ class ClassBuilder {
 pickImage(ImageSource source) async {
   final ImagePicker imagePicker = ImagePicker();
   try {
-    XFile? _file = await imagePicker.pickImage(source: source);
+    XFile? _file = await imagePicker.pickImage(
+      source: source,
+      imageQuality: 50,
+    );
     if (_file != null) {
       print(_file.readAsBytes());
       return await _file.readAsBytes();

@@ -22,12 +22,28 @@ class analysis_screen extends StatefulWidget {
 }
 
 class _analysis_screenState extends State<analysis_screen> {
+  void get() {
+    setState(() {
+      globaldolar;
+      globaleuro;
+      globalsterlin;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    get();
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text("Analiz"),
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       ),

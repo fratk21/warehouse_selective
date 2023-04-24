@@ -12,6 +12,8 @@ class material {
   List? priceType;
   List? suppliers;
   double total;
+  double max;
+  double min;
 
   material({
     required this.materialid,
@@ -25,6 +27,8 @@ class material {
     required this.priceType,
     required this.suppliers,
     required this.total,
+    required this.max,
+    required this.min,
   });
 
   static material fromSnap(DocumentSnapshot snap) {
@@ -41,7 +45,9 @@ class material {
         prescriptionsid: snapshot["prescriptionsid"],
         modulesid: snapshot["modulesid"],
         suppliers: snapshot["suppliers"],
-        total: snapshot["total"]);
+        total: snapshot["total"],
+        max: snapshot["max"],
+        min: snapshot["min"]);
   }
 
   Map<String, dynamic> toJson() => {
@@ -55,6 +61,8 @@ class material {
         "productid": productid,
         "modulesid": modulesid,
         "suppliers": suppliers,
-        "total": total
+        "total": total,
+        "max": max,
+        "min": min,
       };
 }

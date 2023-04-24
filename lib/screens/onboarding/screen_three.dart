@@ -29,9 +29,8 @@ class OnboardingScreenThree extends StatelessWidget {
                   child: ClipPath(
                     clipper: SlandingClipper(),
                     child: Container(
-                      height: size.height * 0.4,
-                      color: yellow,
-                    ),
+                        height: size.height * 0.4,
+                        color: Theme.of(context).appBarTheme.backgroundColor),
                   ),
                 )
               ],
@@ -81,7 +80,7 @@ class OnboardingScreenThree extends StatelessWidget {
                     decoration: BoxDecoration(
                         border: Border.all(color: black, width: 2),
                         shape: BoxShape.circle,
-                        color: yellow),
+                        color: Theme.of(context).appBarTheme.backgroundColor),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: appPadding / 4),
@@ -90,7 +89,7 @@ class OnboardingScreenThree extends StatelessWidget {
                     decoration: BoxDecoration(
                         border: Border.all(color: black, width: 2),
                         shape: BoxShape.circle,
-                        color: yellow),
+                        color: Theme.of(context).appBarTheme.backgroundColor),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: appPadding / 4),

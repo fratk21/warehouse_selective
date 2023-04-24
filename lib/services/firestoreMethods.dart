@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 import 'package:warehouse_selective/models/material.dart' as materialModel;
 import 'package:warehouse_selective/models/prescriptions.dart'
     as prescriptionsModel;
@@ -103,7 +104,9 @@ class firestoreservices {
           price: snap["price"],
           priceType: snap["priceType"],
           suppliers: snap["suppliers"],
-          total: double.parse(snap["total"].toString()));
+          total: double.parse(snap["total"].toString()),
+          max: snap["max"],
+          min: snap["min"]);
       await _firestore
           .collection("products")
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -352,6 +355,8 @@ class firestoreservices {
     List priceType,
     List suppliers,
     double total,
+    double max,
+    double min,
   ) async {
     try {
       materialModel.material materials = materialModel.material(
@@ -365,7 +370,9 @@ class firestoreservices {
           price: price,
           priceType: priceType,
           suppliers: suppliers,
-          total: total);
+          total: total,
+          max: max,
+          min: min);
       await _firestore
           .collection("products")
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -378,8 +385,29 @@ class firestoreservices {
           .update({
         "material": FieldValue.arrayUnion([materials.toJson()])
       });
+      addsystemMaterial(materials, materialname);
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<String?> addsystemMaterial(
+      materialModel.material material, String materialname) async {
+    String materialid = const Uuid().v1();
+    var searchmaterial = await _firestore
+        .collection("products")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("material")
+        .where("materialname", isEqualTo: materialname)
+        .snapshots();
+    if (await searchmaterial.isEmpty) {
+    } else {
+      await _firestore
+          .collection("products")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("material")
+          .doc(materialid)
+          .set(material.toJson());
     }
   }
 
@@ -397,6 +425,8 @@ class firestoreservices {
     List suppliers,
     double totals,
     int index,
+    double max,
+    double min,
   ) async {
     materialModel.material materials1 = materialModel.material(
         materialid: snap["materialid"].toString(),
@@ -409,7 +439,9 @@ class firestoreservices {
         price: snap["price"],
         priceType: snap["priceType"],
         suppliers: snap["suppliers"],
-        total: double.parse(snap["total"].toString()));
+        total: double.parse(snap["total"].toString()),
+        max: max,
+        min: min);
     await _firestore
         .collection("products")
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -433,7 +465,9 @@ class firestoreservices {
         price: price,
         priceType: priceType,
         suppliers: suppliers,
-        total: totals);
+        total: totals,
+        max: max,
+        min: min);
     await _firestore
         .collection("products")
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -446,5 +480,12 @@ class firestoreservices {
         .update({
       "material": FieldValue.arrayUnion([materials.toJson()])
     });
+  }
+
+  Future<String?> thema(bool tema) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({"thema": tema});
   }
 }

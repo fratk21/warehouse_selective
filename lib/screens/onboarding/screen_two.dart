@@ -23,7 +23,7 @@ class OnboardingScreenTwo extends StatelessWidget {
                     clipper: SlandingClipper(),
                     child: Container(
                       height: size.height * 0.4,
-                      color: yellow,
+                      color: Theme.of(context).appBarTheme.backgroundColor,
                     ),
                   ),
                 ),
@@ -80,16 +80,7 @@ class OnboardingScreenTwo extends StatelessWidget {
                     decoration: BoxDecoration(
                         border: Border.all(color: black, width: 2),
                         shape: BoxShape.circle,
-                        color: white),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: appPadding / 4),
-                    width: 15,
-                    height: 15,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: black, width: 2),
-                        shape: BoxShape.circle,
-                        color: yellow),
+                        color: Theme.of(context).appBarTheme.backgroundColor),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: appPadding / 4),
@@ -99,6 +90,15 @@ class OnboardingScreenTwo extends StatelessWidget {
                         border: Border.all(color: black, width: 2),
                         shape: BoxShape.circle,
                         color: white),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: appPadding / 4),
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: black, width: 2),
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).appBarTheme.backgroundColor),
                   ),
                 ],
               ),
