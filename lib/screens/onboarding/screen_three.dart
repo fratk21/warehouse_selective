@@ -43,24 +43,13 @@ class OnboardingScreenThree extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'DELIVERY',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: white,
-                        fontSize: 30,
-                      ),
-                    ),
                     SizedBox(
-                      height: size.height * 0.02,
+                      height: size.height * 0.08,
                     ),
                     Text(
-                      'Lorem Ipsum is simply dummy \ntext of the printing and typesetting industry.',
+                      'Baştan sona\nmaliyet takibi',
                       textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
+                      style: TextStyle(fontSize: 35, color: white),
                     ),
                   ],
                 ),

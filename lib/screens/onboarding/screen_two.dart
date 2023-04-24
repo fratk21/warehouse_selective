@@ -43,8 +43,11 @@ class OnboardingScreenTwo extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(
+                      height: size.height * 0.04,
+                    ),
                     Text(
-                      'PURCHASE',
+                      'Selective Kolay Reçete ile',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -56,11 +59,9 @@ class OnboardingScreenTwo extends StatelessWidget {
                       height: size.height * 0.02,
                     ),
                     Text(
-                      'Lorem Ipsum is simply dummy \ntext of the printing and typesetting industry.',
+                      'Ürün maliyetlerini ve malzemelerizi kolayca takip edebilirsiniz',
                       textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
+                      style: TextStyle(fontSize: 18, color: white),
                     ),
                   ],
                 ),
@@ -121,7 +122,7 @@ class OnboardingScreenTwo extends StatelessWidget {
                       child: Text(
                         'Skip',
                         style: TextStyle(
-                          color: black,
+                          color: white,
                           fontSize: 20.0,
                         ),
                       ),

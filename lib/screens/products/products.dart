@@ -46,7 +46,9 @@ class _products_screenState extends State<products_screen> {
               itemBuilder: (context, index) {
                 Widget result;
                 if (snapshot.data!.docs.isEmpty) {
-                  result = Container();
+                  result = Container(
+                      child: Center(
+                          child: Text("Herhangi bir ürün bulunmamaktadır.")));
                 } else {
                   result =
                       product_card(snap: snapshot.data!.docs[index].data());

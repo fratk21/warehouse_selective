@@ -42,8 +42,11 @@ class OnboardingScreenOne extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    SizedBox(
+                      height: size.height * 0.08,
+                    ),
                     Text(
-                      'SELECT ITEMS',
+                      'Selective Kolay Reçete\'ye',
                       textAlign: TextAlign.end,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -55,10 +58,12 @@ class OnboardingScreenOne extends StatelessWidget {
                       height: size.height * 0.02,
                     ),
                     Text(
-                      'Lorem Ipsum is simply dummy \ntext of the printing and typesetting industry.',
+                      'Hoşgeldiniz',
                       textAlign: TextAlign.end,
                       style: TextStyle(
-                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: white,
+                        fontSize: 30,
                       ),
                     ),
                   ],
